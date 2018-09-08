@@ -1,8 +1,9 @@
-# SmallAreaMixedEffectsQuantiles
-## Code for small area estimation based on the mixed effects linearly interpolated generalized Pareto distribution
-### Main simulation programs: The following programs produce output similar to the simulation output in the manuscript.
+# Code for small area estimation based on the mixed effects linearly interpolated generalized Pareto distribution
+This repository contains code to implement the small area estimation methodology described in the paper "PREDICTION OF SMALL AREA QUANTILES FOR THE CONSERVATION EFFECTS ASSESSMENT PROJECT USING A MIXED EFFECTS QUANTILE REGRESSION MODEL."
+### Main simulation programs
+The following two programs produce output similar to the simulation output in the manuscript.
 * No transformation (Section 4.1): SimForOrganizedCodeAttempt2.R
 * With transformation (Section 4.2): SimForOrganizedCodeAttempt2TestTransform.R
 ### Verification code and output
-#### To allow the user to verify that the code is working as expected, we saved a test data set in the folder "TestDataSets." Output from applying the procedure to the test data set is saved in the excel file "SampleDataSetOutput.xlsx."
+To allow the user to verify that the code is working as expected, we saved a test data set in the folder "TestDataSets." Output from applying the procedure to the test data set is saved in the excel file "SampleDataSetOutput.xlsx."
 * The program "CodeToCompareToTestDataSets.R" reproduces the output in "SampleDataSetOutput.xlsx."
