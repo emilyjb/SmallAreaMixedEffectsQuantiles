@@ -100,6 +100,31 @@ par.bootestsimple1=function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN,
 }
 
 
+par.bootestsimple1Rev =function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN, b.dist, areafac.pop, smc, use.cl, trunc =FALSE){
+
+  initpars <- intparfun(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
+
+  rholxilrhouxiu <- gpdparMatch(initpars$XBinit[smc,], dat.tempb, tauvec)
+
+  XBbetasiguupdate <- par.updatebetasig2bfun(tauvec,dat.tempb, initpars$sig2bhat, b.dist, initpars$beta,rholxilrhouxiu , areafac.pop, smc, initpars$XBinit[smc,], Gs, lxN, use.cl, Rb )
+
+  sig2bhatupdate <- XBbetasiguupdate[[3]]
+  betahat <- XBbetasiguupdate[[2]]
+  XBhatupdate <- XBbetasiguupdate[[1]]
+
+  rholxilrhouxiu <- gpdparMatch(XBhatupdate[smc,], dat.tempb, tauvec)
+
+  areapred <- par.predJW(tauvec, dat.tempb, sig2bhatupdate,  b.dist, betahat, rholxilrhouxiu , areafac.pop, smc, XBhatupdate, Gs, lxN,use.cl, Rb = 150, trunc )
+
+  qhat25b <- areapred[[1]]
+  qhat50b <- areapred[[2]]
+  qhat75b <- areapred[[3]]
+  
+  list(qhat25b, qhat50b, qhat75b, sig2bhatupdate, betahat, XBhatupdate)
+  
+}
+
+
 par.updatebetasig2bfun=function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XB.init, Gs, lxN, use.cl= TRUE, Rb = 150 ){
   seq.points <- qnorm(tauvec, mean = 0, sd = sqrt(sig2bhat))
   lys <- dat.temp$Y
@@ -303,4 +328,36 @@ par.updatebetasig2bfunSortFix <-  function(tauvec, dat.temp, sig2bhat, bdist, be
   
   list(XBhat.update1, betahats.update, sig2bhat.update, mub.cond, vebcond)
 }
+
+
+
+
+
+par.bootestsimple2FixSortTransRev <- function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN, b.dist, areafac.pop, smc, use.cl, trunc =FALSE, lam){
+  
+  initpars <- intparfun(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
+  
+  rholxilrhouxiu <- gpdparMatch(initpars$XBinit[smc,], dat.tempb, tauvec)
+  
+  XBbetasiguupdate <- par.updatebetasig2bfunSortFix(tauvec,dat.tempb, initpars$sig2bhat, b.dist, initpars$beta,rholxilrhouxiu , areafac.pop, smc, initpars$XBinit[smc,], Gs, lxN, use.cl, Rb )
+
+  rholxilrhouxiu <- gpdparMatch(XBhatupdate[smc,], dat.tempb, tauvec)
+  
+  sig2bhatupdate <- XBbetasiguupdate[[3]]
+  betahat <- XBbetasiguupdate[[2]]
+  XBhatupdate <- XBbetasiguupdate[[1]]
+   
+  areapred <- predJWTransFixB0Exp(tauvec, dat.tempb, sig2bhatupdate,  b.dist, betahat, rholxilrhouxiu , areafac.pop, smc, XBhatupdate, Gs, lxN,use.cl, Rb = 150, trunc, lam ,0)
+  
+  qhat25b <- areapred[[1]]
+  qhat50b <- areapred[[2]]
+  qhat75b <- areapred[[3]]
+  
+  list(qhat25b, qhat50b, qhat75b, sig2bhatupdate, betahat, XBhatupdate, rholxilrhouxiu)
+  
+}
+
+
+
+
 

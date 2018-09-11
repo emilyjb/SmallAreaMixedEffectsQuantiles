@@ -206,7 +206,7 @@ if(doBoot){
     b <- b + 1 
     bootsampyxq <- bootgensimple2trans(sig2bhatupdate, GN, XBhatupdate, CNis, nis, D, areafac.pop, rholxilrhouxiu, lamcur)
     q25popbs <- rbind(q25popbs, bootsampyxq[[3]]); q50popbs <- rbind(q50popbs, bootsampyxq[[4]]); q75popbs <- rbind(q75popbs, bootsampyxq[[5]])#
-    bootestyxq <- par.bootestsimple2FixSortTrans(data.frame(Y = bootsampyxq[[1]], X = lxN[bootsampyxq[[2]]]), X = lxN[bootsampyxq[[2]]], areafac.pop[bootsampyxq[[2]]], D, GN[bootsampyxq[[2]],], tauvec,  1500, lxN, b.dist, areafac.pop, bootsampyxq[[2]], use.cl = FALSE, trunc = FALSE, lam = lamcur)
+    bootestyxq <- par.bootestsimple2FixSortTransRev(data.frame(Y = bootsampyxq[[1]], X = lxN[bootsampyxq[[2]]]), X = lxN[bootsampyxq[[2]]], areafac.pop[bootsampyxq[[2]]], D, GN[bootsampyxq[[2]],], tauvec,  1500, lxN, b.dist, areafac.pop, bootsampyxq[[2]], use.cl = FALSE, trunc = FALSE, lam = lamcur)
     qhat25bs <- rbind(qhat25bs, bootestyxq[[1]])
     qhat50bs <- rbind(qhat50bs, bootestyxq[[2]])
     qhat75bs <- rbind(qhat75bs, bootestyxq[[3]])
