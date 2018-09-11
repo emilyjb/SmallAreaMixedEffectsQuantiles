@@ -230,8 +230,10 @@ if(doBoot){
   b <- 0
   repeat{
     b <- b + 1
+    ######## Generate a bootstrap sample and store bootstrap versions of the population quantiles
     bootsampyxq <- bootgensimple3(sig2bhatupdate, GN, XBhatupdate, CNis, nis, D, areafac.pop, rholxilrhouxiu, smc, b.dist)
     q25popbs <- rbind(q25popbs, bootsampyxq[[3]]); q50popbs <- rbind(q50popbs, bootsampyxq[[4]]); q75popbs <- rbind(q75popbs, bootsampyxq[[5]])
+    ########  Construct bootstrap estimates and store bootstrap estimates of the population quantiles
     bootestyxq <- par.bootestsimple1Rev(data.frame(Y = bootsampyxq[[1]], X = lxN[bootsampyxq[[2]]]), X = lxN[bootsampyxq[[2]]], areafac.pop[bootsampyxq[[2]]], D, GN[bootsampyxq[[2]],], tauvec,  1500, lxN, b.dist, areafac.pop, bootsampyxq[[2]], use.cl = FALSE)
     qhat25bs <- rbind(qhat25bs, bootestyxq[[1]])
     qhat50bs <- rbind(qhat50bs, bootestyxq[[2]])
