@@ -9,4 +9,4 @@ The following two programs produce output similar to the simulation output in th
     * SimForOrganizedCodeAttemptRevisedTestTransform.R -- run simulation
     * OutputWithTransformation.R -- tabulate output SimForOrganizedCodeAttempt2TestTransform.R
 ### Verification code and output
-To allow the user to verify that the code is working as expected, we saved a test data set in Rdata file "TestDataSetNoTransformationSNErrorsNormalBs.Rdata." Output from applying the procedure to the test data set is saved in the excel file "SampleDataSetOutput.xlsx." The program "CodeToCompareToTestDataSets.R" reproduces the output in "SampleDataSetOutput.xlsx."
+To allow the user to verify that the code is working as expected, we saved a test data set in the Rdata file "TestDataSetNoTransformationSNErrorsNormalBs.Rdata." Output from applying the procedure to the test data set is saved in the excel file "SampleDataSetOutput.xlsx." The program "CodeToCompareToTestDataSets.R" reproduces the output in "SampleDataSetOutput.xlsx."
