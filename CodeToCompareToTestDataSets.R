@@ -2,7 +2,7 @@ rm(list = ls(all = TRUE))
 
 #####  Load test data set:
 
-load("TestDataSets/TestDataSetNoTransformationSNErrorsNormalBs.Rdata")
+load("TestDataSetNoTransformationSNErrorsNormalBs2.Rdata")
 
 ###  Load libraries
 library(nlme)
@@ -13,7 +13,7 @@ library("quantreg")
 library("sn")
 library("eva")
 
-options("contrasts" = c("contr.sum", "contr.poly"))  ### Use sum to zero constraints for initial values, as defined in Appendix
+options("contrasts" = c("contr.sum", "contr.poly"))  ### Use sum to zero constraints for initial values, as defined in Appendix 1
 library("parallel")
 cl <- makeCluster(getOption ("cl.cores", 2))  	#Can increase the number of clusters
 
@@ -175,11 +175,11 @@ cl <- makeCluster(getOption ("cl.cores", 2))  	#Can increase the number of clust
   summary(EB.norm.90s[1,])
 
   ################## LIGPD estimates
-  summary(EB.norm.10s[1,])
-  summary(EB.norm.25s[1,])
-  summary(EB.norm.50s[1,])
-  summary(EB.norm.75s[1,])
-  summary(EB.norm.90s[1,])
+  summary(w10JCs[1,])
+  summary(w25JCs[1,])
+  summary(w50JCs[1,])
+  summary(w75JCs[1,])
+  summary(w90JCs[1,])
 
  ####  Summarize in data set:
  sumests <- rbind( summary(q10bs[1,]),
@@ -194,15 +194,16 @@ cl <- makeCluster(getOption ("cl.cores", 2))  	#Can increase the number of clust
   summary(EB.norm.75s[1,]),
   summary(EB.norm.90s[1,]),
 
-  summary(EB.norm.10s[1,]),
-  summary(EB.norm.25s[1,]),
-  summary(EB.norm.50s[1,]),
-  summary(EB.norm.75s[1,]),
-  summary(EB.norm.90s[1,])
+  summary(w10JCs[1,]),
+  summary(w25JCs[1,]),
+  summary(w50JCs[1,]),
+  summary(w75JCs[1,]),
+  summary(w90JCs[1,])  
 )
 
  data.frame( Method = rep(c("ALD", "NEB", "LIGPD"), each = 5),QuantileLevel = rep(c(10, 25, 50, 75, 90), times = 3), sumests)
  
+ dfout <- data.frame( Method = rep(c("ALD", "NEB", "LIGPD"), each = 5),QuantileLevel = rep(c(10, 25, 50, 75, 90), times = 3), sumests)
 
 
 
