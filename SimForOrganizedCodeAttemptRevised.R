@@ -38,7 +38,7 @@ Nispop <- rep(Nis, Nis)
 areafac.pop <- rep(1:D, Nis)
 Nissamp <- rep(Nis, nis)
 
-GN <- model.matrix(lm(Nispop~as.factor(areafac.pop)-1))
+### GN <- model.matrix(lm(Nispop~as.factor(areafac.pop)-1))
 
 ### Set parameters:
 
