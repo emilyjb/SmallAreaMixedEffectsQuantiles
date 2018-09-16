@@ -219,6 +219,12 @@ repeat{
   w90JCs <- rbind(w90JCs, areapred[[4]])
   w10JCs <- rbind(w10JCs, areapred[[5]])
 
+  w25JC2s <- rbind(w25JC2s, areapred2[[1]])
+  w50JC2s <- rbind(w50JC2s, areapred2[[2]])
+  w75JC2s <- rbind(w75JC2s, areapred2[[3]])
+  w90JC2s <- rbind(w90JC2s, areapred2[[4]])
+  w10JC2s <- rbind(w10JC2s, areapred2[[5]])
+
   meanJs <- rbind(meanJs, areapred[[6]])
   varJs <- rbind(varJs, areapred[[7]])
   

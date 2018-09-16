@@ -37,16 +37,34 @@ XBhatupdate <- XBbetasiguupdate[[1]]
 ######## Update the estimates of the parameters of the extreme value distribution
 rholxilrhouxiu <- gpdparMatch(XBhatupdate[smc,], dat.temp, tauvec)
 
+
+
+######## Update estimates of regression parameters
+XBbetasiguupdate <- par.updatebetasig2bfunConstrFix(tauvec,dat.temp, initpars$sig2bhat, b.dist, initpars$beta,rholxilrhouxiu , areafac.pop, smc, initpars$XBinit[smc,], Gs, lxN, use.cl= FALSE, Rb = 1500 )
+
+########  Construct the LIGPD predictors
+areapred1 <- predJWTransFixB0Exp(tauvec, dat.temp, sig2bhatupdate,  b.dist, betahat, rholxilrhouxiu , areafac.pop, smc, XBhatupdate, Gs, lxN,use.cl= FALSE, Rb = 1500, trunc = FALSE, lamcur )
+
+
+sig2bhatupdate <- XBbetasiguupdate[[3]]
+betahat <- XBbetasiguupdate[[2]]
+XBhatupdate <- XBbetasiguupdate[[1]]
+
+######## Update the estimates of the parameters of the extreme value distribution
+rholxilrhouxiu <- gpdparMatch(XBhatupdate[smc,], dat.temp, tauvec)
+
+ 
+
+########  Construct the LIGPD predictors
+areapred2 <- predJWTransFixB0Exp(tauvec, dat.temp, sig2bhatupdate,  b.dist, betahat, rholxilrhouxiu , areafac.pop, smc, XBhatupdate, Gs, lxN,use.cl= FALSE, Rb = 1500, trunc = FALSE, lamcur )
+
+
 ######## Store the estimates of the regression parameters  and variance
 bj10Cs <- rbind(bj10Cs, betahat[1,])
 bj11Cs <- rbind(bj11Cs, betahat[2,])
 
+
 sig2blls <- c(sig2blls, sig2bhatupdate)
-
-########  Construct the LIGPD predictors
-areapred <- predJWTransFixB0Exp(tauvec, dat.temp, sig2bhatupdate,  b.dist, betahat, rholxilrhouxiu , areafac.pop, smc, XBhatupdate, Gs, lxN,use.cl= FALSE, Rb = 1500, trunc = FALSE, lamcur )
-
-
 
 
 
