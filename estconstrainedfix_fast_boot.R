@@ -23,30 +23,14 @@ XBhatupdate <- XBbetasiguupdate[[1]]
 ######## Update the estimates of the parameters of the extreme value distribution
 rholxilrhouxiu <- gpdparMatch(XBhatupdate[smc,], dat.temp, tauvec)
 
- 
-
-########  Construct the LIGPD predictors
-areapred1 <- par.predJWFix(tauvec, dat.temp, sig2bhatupdate,  b.dist, betahat, rholxilrhouxiu , areafac.pop, smc, XBhatupdate, Gs, lxN,use.cl= FALSE, Rb = 1500 )
-
-#######  LIGPD approximation for the population
-all.q.Jpop1=areapred1$all.q.J
-
- ######## Update estimates of regression parameters
-XBbetasiguupdate <- par.updatebetasig2bfunConstrFix(tauvec,dat.temp, sig2bhatupdate, b.dist, betahat ,rholxilrhouxiu , areafac.pop, smc, XBhatupdate[smc,], Gs, lxN, use.cl= FALSE, Rb = 1500 )
-sig2bhatupdate <- XBbetasiguupdate[[3]]
-betahat <- XBbetasiguupdate[[2]]
-XBhatupdate <- XBbetasiguupdate[[1]]
-
-######## Update the estimates of the parameters of the extreme value distribution
-rholxilrhouxiu <- gpdparMatch(XBhatupdate[smc,], dat.temp, tauvec)
-
 ######## Store the estimates of the regression parameters 
 bj10Cs <- rbind(bj10Cs, betahat[1,])
 bj11Cs <- rbind(bj11Cs, betahat[2,])
 
 ########  Construct the LIGPD predictors
-areapred2 <- par.predJWFix(tauvec, dat.temp, sig2bhatupdate,  b.dist, betahat, rholxilrhouxiu , areafac.pop, smc, XBhatupdate, Gs, lxN,use.cl= FALSE, Rb = 1500 )
+areapred <- par.predJWFix(tauvec, dat.temp, sig2bhatupdate,  b.dist, betahat, rholxilrhouxiu , areafac.pop, smc, XBhatupdate, Gs, lxN,use.cl= FALSE, Rb = 1500 )
 
 #######  LIGPD approximation for the population
-all.q.Jpop2=areapred2$all.q.J
+all.q.Jpop=areapred$all.q.J
 
+ 

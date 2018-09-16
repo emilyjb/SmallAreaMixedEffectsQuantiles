@@ -4,6 +4,7 @@ rm(list=ls(all=TRUE))
 ### setwd("E:\\SAEQR\\SmallAreaMixedEffectsQuantiles-master\\SmallAreaMixedEffectsQuantiles-master-Revised")
 setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
 
+
 ###  Load libraries
 library(nlme)
 library("lqmm")
@@ -19,7 +20,6 @@ source("genpopmixedllcomb.R")			# Generate data
 source("NEBfuns.R")				# For EBP predictors
 source("LIGPDfuns.R")				# For LIGPD predictors
 source("Bootfuns.R")				# For Bootstrap MSE computation
-source("updatebetasortfuns.R")            # Alternative sorting procedures
 
 ### Population and sample size configuration:
 N <- 20000
@@ -50,9 +50,9 @@ mulx <- 0
 sig2lx <- 1
 
 ####  Set distribution options:
-e.dist <- "Chi" ##( Other options are "T" for t distribution or "Chi" for chi-square)
+e.dist <- "SN" ##( Other options are "T" for t distribution or "Chi" for chi-square)
 b.dist <- "Normal"  ##( Other option is "Laplace")
-doBoot <- FALSE   ##(Change to "FALSE" to skip running bootstrap.)
+doBoot <- TRUE   ##(Change to "FALSE" to skip running bootstrap.)
 
 time.start.all <- Sys.time()
 
@@ -204,25 +204,14 @@ repeat{
   ############################################     LIGPD Predictors    #################################################################
   
   ########  Compute the LIGPD predictors
-  source("estsort.R")
-  source("estisoreg.R")
   source("estconstrainedfix_fast_boot.R")
   
-  
   ######## Store the estimates 
-  w25JCs <- rbind(w25JCs, areapred1[[1]])
-  w50JCs <- rbind(w50JCs, areapred1[[2]])
-  w75JCs <- rbind(w75JCs, areapred1[[3]])
-  w90JCs <- rbind(w90JCs, areapred1[[4]])
-  w10JCs <- rbind(w10JCs, areapred1[[5]])
-
-  ######## Store the estimates 
-  w25JC2s <- rbind(w25JC2s, areapred2[[1]])
-  w50JC2s <- rbind(w50JC2s, areapred2[[2]])
-  w75JC2s <- rbind(w75JC2s, areapred2[[3]])
-  w90JC2s <- rbind(w90JC2s, areapred2[[4]])
-  w10JC2s <- rbind(w10JC2s, areapred2[[5]])
-
+  w25JCs <- rbind(w25JCs, areapred[[1]])
+  w50JCs <- rbind(w50JCs, areapred[[2]])
+  w75JCs <- rbind(w75JCs, areapred[[3]])
+  w90JCs <- rbind(w90JCs, areapred[[4]])
+  w10JCs <- rbind(w10JCs, areapred[[5]])
 
   meanJs <- rbind(meanJs, areapred[[6]])
   varJs <- rbind(varJs, areapred[[7]])
@@ -265,7 +254,7 @@ if(doBoot){
   }
   
   ### Save the Image Every 10 Iterations
-  if(cnt%%10 == 0){ save.image("ChiENormalBCompare.Rdata") }	
+  if(cnt%%10 == 0){ save.image("SNOutputInterpF1LaplaceFix_temp90.Rdata") }	
   
   print(paste(cnt))
   
