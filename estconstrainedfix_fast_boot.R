@@ -32,7 +32,7 @@ areapred1 <- par.predJWFix(tauvec, dat.temp, sig2bhatupdate,  b.dist, betahat, r
 all.q.Jpop1=areapred1$all.q.J
 
  ######## Update estimates of regression parameters
-XBbetasiguupdate <- par.updatebetasig2bfunConstrFix(tauvec,dat.temp, initpars$sig2bhat, b.dist, initpars$beta,rholxilrhouxiu , areafac.pop, smc, initpars$XBinit[smc,], Gs, lxN, use.cl= FALSE, Rb = 1500 )
+XBbetasiguupdate <- par.updatebetasig2bfunConstrFix(tauvec,dat.temp, sig2bhatupdate, b.dist, betahat ,rholxilrhouxiu , areafac.pop, smc, XBhatupdate[smc,], Gs, lxN, use.cl= FALSE, Rb = 1500 )
 sig2bhatupdate <- XBbetasiguupdate[[3]]
 betahat <- XBbetasiguupdate[[2]]
 XBhatupdate <- XBbetasiguupdate[[1]]
