@@ -254,7 +254,7 @@ if(doBoot){
   }
   
   ### Save the Image Every 10 Iterations
-  if(cnt%%10 == 0){ save.image("SNOutputInterpF1LaplaceFix_temp90.Rdata") }	
+  if(cnt%%10 == 0){ save.image("TwoIterations/ChiENormalBTwoStep1.Rdata") }	
   
   print(paste(cnt))
   
