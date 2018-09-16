@@ -120,17 +120,6 @@ w75JSs <- c()
 w10JSs <- c()
 w90JSs <- c()
 
-w25JS2s <- c()
-w50JS2s <- c()
-w75JS2s <- c()
-w10JS2s <- c()
-w90JS2s <- c()
-
-w25JC2s <- c()
-w50JC2s <- c()
-w75JC2s <- c()
-w10JC2s <- c()
-w90JC2s <- c()
 
 w25JRs <- c()
 w50JRs <- c()
@@ -138,11 +127,6 @@ w75JRs <- c()
 w10JRs <- c()
 w90JRs <- c()
 
-w25JR2s <- c()
-w50JR2s <- c()
-w75JR2s <- c()
-w10JR2s <- c()
-w90JR2s <- c()
 varJs <- c()
 
 
