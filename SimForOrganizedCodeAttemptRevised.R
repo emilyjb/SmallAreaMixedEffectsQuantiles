@@ -2,6 +2,8 @@ rm(list=ls(all=TRUE))
 
 ### Set your working directory to the folder that contains the files posted to Github. For example:
 ### setwd("E:\\SAEQR\\SmallAreaMixedEffectsQuantiles-master\\SmallAreaMixedEffectsQuantiles-master-Revised")
+setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
+
 
 ###  Load libraries
 library(nlme)
@@ -252,7 +254,7 @@ if(doBoot){
   }
   
   ### Save the Image Every 10 Iterations
-  if(cnt%%10 == 0){ save.image("SNOutputInterpF1LaplaceFix_temp90.Rdata") }	
+  if(cnt%%10 == 0){ save.image("TwoIterations/ChiENormalBTwoStep1.Rdata") }	
   
   print(paste(cnt))
   
