@@ -102,7 +102,7 @@ par.bootestsimple1=function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN,
 
 par.bootestsimple1Rev =function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN, b.dist, areafac.pop, smc, use.cl, trunc =FALSE){
 
-  initpars <- intparfun(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
+  initpars <- intparfunSort(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
 
   rholxilrhouxiu <- gpdparMatch(initpars$XBinit[smc,], dat.tempb, tauvec)
 
@@ -284,7 +284,7 @@ bootgensimple2trans <- function(sig2bhat.update, GN, XBhat.update1, CNis, nis, D
 
 par.bootestsimple2FixSortTrans <- function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN, b.dist, areafac.pop, smc, use.cl, trunc =FALSE, lam){
   
-  initpars <- intparfun(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
+  initpars <- intparfunSort(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
   
   rholxilrhouxiu <- gpdparMatch(initpars$XBinit[smc,], dat.tempb, tauvec)
   
@@ -342,7 +342,7 @@ par.updatebetasig2bfunSortFix <- function(tauvec, dat.temp, sig2bhat, bdist, bet
 
 par.bootestsimple2FixSortTransRev <- function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN, b.dist, areafac.pop, smc, use.cl, trunc =FALSE, lam){
   
-  initpars <- intparfun(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
+  initpars <- intparfunSort(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
   
   rholxilrhouxiu <- gpdparMatch(initpars$XBinit[smc,], dat.tempb, tauvec)
   

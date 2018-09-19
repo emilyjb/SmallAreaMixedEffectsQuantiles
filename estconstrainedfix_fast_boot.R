@@ -5,7 +5,7 @@ Gs <- GN[smc,]
 X <- lxN[smc]
 
 ######## Obtain initial values of regression parameters as described in Appendix 1
-initpars <- intparfun(dat.temp, X, areafac.samp,D, Gs,tauvec, lxN, use.cl = FALSE)
+initpars <- intparfunSort(dat.temp, X, areafac.samp,D, Gs,tauvec, lxN, use.cl = FALSE)
 
 ######## Store initial values of regression parameters
 bj00Cs <- rbind(bj00Cs, initpars$beta[1,])

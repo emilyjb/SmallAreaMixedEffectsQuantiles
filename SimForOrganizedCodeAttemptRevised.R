@@ -2,7 +2,7 @@ rm(list=ls(all=TRUE))
 
 ### Set your working directory to the folder that contains the files posted to Github. For example:
 ### setwd("E:\\SAEQR\\SmallAreaMixedEffectsQuantiles-master\\SmallAreaMixedEffectsQuantiles-master-Revised")
-setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
+setwd("C:/Users/emilyb/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
 
 
 ###  Load libraries
