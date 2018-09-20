@@ -355,7 +355,7 @@ par.bootestsimple2FixSortTransRev <- function(dat.tempb, X, areafac.samp, D, Gs,
  
  rholxilrhouxiu <- gpdparMatch(XBhatupdate[smc,], dat.tempb, tauvec)
 
-    XBbetasiguupdate <- par.updatebetasig2bfunSortFix(tauvec,dat.tempb, initpars$sig2bhat, b.dist, initpars$beta,rholxilrhouxiu , areafac.pop, smc, initpars$XBinit[smc,], Gs, lxN, use.cl, Rb )
+    XBbetasiguupdate <- par.updatebetasig2bfunSortFix(tauvec,dat.tempb, sig2bhatupdate, b.dist, betahat,rholxilrhouxiu , areafac.pop, smc, XBhatupdate[smc,], Gs, lxN, use.cl, Rb )
 
   
   sig2bhatupdate <- XBbetasiguupdate[[3]]
