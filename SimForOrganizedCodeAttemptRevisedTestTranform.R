@@ -1,6 +1,7 @@
 rm(list=ls(all=TRUE))
 
 ##### Set the working directory to a folder that contains the files posted to the Github repository
+setwd("G:/Researchers-Investigators/Berg/BaseCodeQRSAE/SortFixBootstrapFromGit9-19-2018/SmallAreaMixedEffectsQuantiles-SortFixBootstrap")
 
 ### Load libraries
 library(nlme)
@@ -120,11 +121,11 @@ repeat{
   ##### ###### ####### ######### ########  Sample Quantiles and Means ########  ######## ######## ######## ######## ######## 
   
   ########### Calculate and store sample quantiles
-  qhats.samp10 <- rbind(qhats.samp10,  tapply(lys, areafac.pop[smc], quantile, prob = 0.10))
-  qhats.samp25 <- rbind(qhats.samp25,  tapply(lys, areafac.pop[smc], quantile, prob = 0.25))
-  qhats.samp5 <- rbind(qhats.samp5,  tapply(lys, areafac.pop[smc], quantile, prob = 0.5))
-  qhats.samp75 <- rbind(qhats.samp75,  tapply(lys, areafac.pop[smc], quantile, prob = 0.75))
-  qhats.samp90 <- rbind(qhats.samp75,  tapply(lys, areafac.pop[smc], quantile, prob = 0.90))
+  qhats.samp10 <- rbind(qhats.samp10,  tapply(exp(lys), areafac.pop[smc], quantile, prob = 0.10))
+  qhats.samp25 <- rbind(qhats.samp25,  tapply(exp(lys), areafac.pop[smc], quantile, prob = 0.25))
+  qhats.samp5 <- rbind(qhats.samp5,  tapply(exp(lys), areafac.pop[smc], quantile, prob = 0.5))
+  qhats.samp75 <- rbind(qhats.samp75,  tapply(exp(lys), areafac.pop[smc], quantile, prob = 0.75))
+  qhats.samp90 <- rbind(qhats.samp90,  tapply(exp(lys), areafac.pop[smc], quantile, prob = 0.90))
  
   ########### Calculate and store sample means   
   Gs <- GN[smc,] 

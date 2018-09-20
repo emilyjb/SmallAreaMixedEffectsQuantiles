@@ -2,8 +2,7 @@ rm(list=ls(all=TRUE))
 
 ### Set your working directory to the folder that contains the files posted to Github. For example:
 ### setwd("E:\\SAEQR\\SmallAreaMixedEffectsQuantiles-master\\SmallAreaMixedEffectsQuantiles-master-Revised")
-setwd("C:/Users/emilyb/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
-
+setwd("G:/Researchers-Investigators/Berg/BaseCodeQRSAE/SortFixBootstrapFromGit9-19-2018/SmallAreaMixedEffectsQuantiles-SortFixBootstrap")
 
 ###  Load libraries
 library(nlme)
@@ -50,7 +49,7 @@ mulx <- 0
 sig2lx <- 1
 
 ####  Set distribution options:
-e.dist <- "SN" ##( Other options are "T" for t distribution or "Chi" for chi-square)
+e.dist <- "Chi" ##( Other options are "T" for t distribution or "Chi" for chi-square)
 b.dist <- "Normal"  ##( Other option is "Laplace")
 doBoot <- TRUE   ##(Change to "FALSE" to skip running bootstrap.)
 
@@ -121,7 +120,7 @@ repeat{
   qhats.samp25 <- rbind(qhats.samp25,  tapply(lys, areafac.pop[smc], quantile, prob = 0.25))
   qhats.samp5 <- rbind(qhats.samp5,  tapply(lys, areafac.pop[smc], quantile, prob = 0.5))
   qhats.samp75 <- rbind(qhats.samp75,  tapply(lys, areafac.pop[smc], quantile, prob = 0.75))
-  qhats.samp90 <- rbind(qhats.samp75,  tapply(lys, areafac.pop[smc], quantile, prob = 0.90))
+  qhats.samp90 <- rbind(qhats.samp90,  tapply(lys, areafac.pop[smc], quantile, prob = 0.90))
 
   ########### Calculate and store sample means  
   Gs <- GN[smc,] 
@@ -254,7 +253,7 @@ if(doBoot){
   }
   
   ### Save the Image Every 10 Iterations
-  if(cnt%%10 == 0){ save.image("TwoIterations/ChiENormalBTwoStep1.Rdata") }	
+  if(cnt%%10 == 0){ save.image("ChiSquareENormalBOutputSortFixInit/ChiENormalBSortFixInit1.Rdata") }	
   
   print(paste(cnt))
   
