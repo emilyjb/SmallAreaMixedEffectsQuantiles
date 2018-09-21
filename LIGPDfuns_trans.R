@@ -161,7 +161,7 @@ predJWTransFixB0Exp <- function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdp
 
 
 
-ianumden.mdvpfix=function(d, seq.points, lys, betahats.update, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sdb, predfix){
+ianumden.mvdpfix=function(d, seq.points, lys, betahats.update, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sdb, predfix){
   mat=sapply( seq.points, compfall.b1forintp,  Dpick= d, lys=lys, betahats =betahats.update, tauvec=tauvec, rhohat.l=rhohat.l, xi.l=xi.l, rhohat.u=rhohat.u, xi.u=xi.u, areafac.pop=areafac.pop, smc = smc, sdb=sdb, predfix=predfix)
   mat2=cbind(0, mat[,-dim(mat)[2]])
   midpts <- (mat + mat2)/2
