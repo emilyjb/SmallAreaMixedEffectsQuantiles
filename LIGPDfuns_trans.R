@@ -116,7 +116,7 @@ predJWTransFixB0Exp <- function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdp
      outall <- sapply( 1:D, FUN =ianumden.mvdpfixlaplace , seq.points, lys, betahat, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sqrt(sig2bhat),XBhat.update1[smc,])
     }
     if(bdist == "Normal"){
-      outall <- sapply( 1:D, FUN = ianumden.mdvpfix , seq.points, lys, betahat, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sqrt(sig2bhat),XBhat.update1[smc,])
+      outall <- sapply( 1:D, FUN = ianumden.mvdpfix , seq.points, lys, betahat, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sqrt(sig2bhat),XBhat.update1[smc,])
     } 
   } 
 
@@ -167,6 +167,15 @@ ianumden.mvdpfix=function(d, seq.points, lys, betahats.update, tauvec, rhohat.l,
   midpts <- (mat + mat2)/2
   widths <- diff(seq.points)
   out=sapply(1:4, function(c) sum(widths*midpts[c,-1]))
+}
+
+
+ianumden.mvdpfix2=function(d, seq.points, lys, betahats.update, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sdb, predfix){
+  mat=sapply( seq.points, compfall.b1forintp,  Dpick= d, lys=lys, betahats =betahats.update, tauvec=tauvec, rhohat.l=rhohat.l, xi.l=xi.l, rhohat.u=rhohat.u, xi.u=xi.u, areafac.pop=areafac.pop, smc = smc, sdb=sdb, predfix=predfix)
+  mat2=cbind(0, mat[,-dim(mat)[2]])
+  midpts <- (mat + mat2)/2
+  widths <- diff(seq.points)
+  out=sapply(1:3, function(c) sum(widths*midpts[c,-1]))
 }
 
 
