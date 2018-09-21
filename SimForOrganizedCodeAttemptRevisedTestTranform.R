@@ -1,7 +1,7 @@
 rm(list=ls(all=TRUE))
 
 ##### Set the working directory to a folder that contains the files posted to the Github repository
-setwd("G:/Researchers-Investigators/Berg/BaseCodeQRSAE/SortFixBootstrapFromGit9-19-2018/SmallAreaMixedEffectsQuantiles-SortFixBootstrap")
+setwd("C:/Users/Emily/Documents/GitHub/Simulations/SmallAreaMixedEffectsQuantiles-SortFixBootstrap")
 
 ### Load libraries
 library(nlme)
@@ -262,7 +262,7 @@ if(doBoot){
 
   ### Save the Image Every 10 Iterations
 
-  if(cnt%%10 == 0){ save.image("SNTransBoot3Normal.Rdata") }	
+  if(cnt%%10 == 0){ save.image("SNTransOutputFixBoot/SNTransNormalFixSortBoot1.Rdata") }	
   
   print(paste(cnt))
   
