@@ -33,7 +33,7 @@ n <- sum(nis)
 N <- sum(Nis)
 
 ### Bootstrap sample size (denoted by T in manuscript)
-Bmax <- 100
+B  <- 100
 
 
 # Sampling fractions
@@ -59,7 +59,7 @@ lam <- 0
 e.dist <- "SN"  ### Other options are "Chi" or "T"
 ####### Area random effect distribution
 b.dist <- "Normal"  ###  Other option is "Laplace"
-doBoot <- FALSE  #### Change to FALSE to skip bootstrap
+doBoot <- TRUE  #### Change to FALSE to skip bootstrap
 
 time.start.all <- Sys.time()
 
