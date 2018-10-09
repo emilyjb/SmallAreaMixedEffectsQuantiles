@@ -148,6 +148,68 @@ repeat{
   lbarNis <- as.vector(t(GN)%*%hinvtransG1(lyNmc, lam))/Nis
   lbarNiss <- rbind(lbarNiss, lbarNis)
 
+  ##### ###### ####### ######### ######## REML and EBP ########  ######## ######## ######## ######## ######## 
+
+  ########### Obtain REML estimates of model parameters  
+  grmc <- getremlests(smc, D, lyNmc, lXN, GN)
+  sig2uhatmc <- grmc[[1]]
+  sig2ehatmc <- grmc[[2]]
+  betahatmc <- grmc[[3]]
+  vhatbetahatmc <- grmc[[4]]
+
+  ##########  Store REML estimates of model parameters
+  est.remls <- rbind(est.remls, c(betahatmc, sig2uhatmc, sig2ehatmc))
+  
+  lbarsi <- t(Gs)%*%lyNmc[smc]/nis
+  dbarsi <- t(Gs)%*%lXN[smc,]/nis
+  gammais <- sig2uhatmc/(sig2uhatmc + sig2ehatmc/nis)
+  mu.dev <- as.vector(gammais*(lbarsi - dbarsi%*%betahatmc))
+  mean.cond <- lXN%*%betahatmc + GN%*%(mu.dev) 
+  var.cond <- GN%*%(gammais*sig2ehatmc) + sig2ehatmc
+
+  t.min <- min(all.q)
+  t.max <- max(all.q)	
+  t.seq <- seq(t.min, t.max, length = 100)
+  
+  ##########  Estimate CDF for conditional normal distribution (not used) 
+  cdf.norm.all <- sapply(t.seq, cnp, mean.cond, sqrt(var.cond))
+  cdf.smc <- sapply(t.seq, function(t){ ifelse(lys <= t, 1, 0)})
+  cdf.norm.all[smc,] <- cdf.smc
+
+  ########## Implement EBP, as described in Remark 2 of Molina and Rao (2010): 
+  ########## Simulate a population from the conditional normal distribution (step b of Remark 2)
+  r.c.n <- replicate(100, rnorm(length(mean.cond), mean = mean.cond, sd = sqrt(var.cond)))
+  ########## Augment the nonsampled units with the vector of sampled elements (step c of Remark 2)
+  r.c.n[smc,] <- lys
+  ########## Back-tranform the generated population
+  r.c.n <- apply(r.c.n, 2, hinvtransG1, lam)
+
+  ########## Compute the quantile for each generated population
+  EB.norm <- sapply(1:D, function(d){apply(apply(r.c.n[areafac.pop == d,], 2, quantile, prob = c(0.1, 0.25, 0.5, 0.75, 0.9))[c(1,2,3,4,5),], 1, mean)}) 
+  ########## Crude estimate of the variance of the leading term in the EBP
+  VEB.norm <- sapply(1:D, function(d){apply(apply(r.c.n[areafac.pop == d,], 2, quantile, prob = c(0.1, 0.25, 0.5, 0.75, 0.9))[c(1,2,3,4,5),]^2, 1, mean)}) - EB.norm^2
+
+  ########## Store EBP estimates of quantiles 
+  EB.norm.25s <- rbind(EB.norm.25s, EB.norm[2,])
+  EB.norm.50s <- rbind(EB.norm.50s, EB.norm[3,])
+  EB.norm.75s <- rbind(EB.norm.75s, EB.norm[4,])
+  EB.norm.10s <- rbind(EB.norm.10s, EB.norm[1,])
+  EB.norm.90s <- rbind(EB.norm.90s, EB.norm[5,])
+  
+  ######### Alternative estimator of finite population variance for previous comparison purposes (not used)
+  areavar.norm <- sapply(1:D, function(d){ var(as.vector(r.c.n[areafac.pop == d,]))})
+  
+  ######### Store crude estimates of variances of leading term
+  VEB.norm.25s <- rbind(VEB.norm.25s, VEB.norm[2,])
+  VEB.norm.50s <- rbind(VEB.norm.50s, VEB.norm[3,])
+  VEB.norm.75s <- rbind(VEB.norm.75s, VEB.norm[4,])
+
+  ######### EBP estimate of the finite population mean 
+  norm.mean1 <- mean.cond
+  norm.mean1[smc] <- lys
+  ybar.norms <- rbind(ybar.norms, as.vector(t(GN)%*%norm.mean1)/Nis)
+
+
  
   ############################################     LIGPD Predictors    #################################################################
   
