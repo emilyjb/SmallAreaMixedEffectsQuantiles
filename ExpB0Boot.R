@@ -279,14 +279,14 @@ if(doBoot){
 
 
 
-  lci25Exps <- rbind(lci25Exps, exp(areapred[[1]] - 1.96*sqrt(mhb25s)))
-  uci25Exps <- rbind(uci25Exps, exp(areapred[[1]] + 1.96*sqrt(mhb25s)))
+  lci25Exps <- rbind(lci25Exps, exp(areapred[[1]] - 1.96*sqrt(mhb25)))
+  uci25Exps <- rbind(uci25Exps, exp(areapred[[1]] + 1.96*sqrt(mhb25)))
 
-  lci50Exps <- rbind(lci50Exps, exp(areapred[[2]] - 1.96*sqrt(mhb50s)))
+  lci50Exps <- rbind(lci50Exps, exp(areapred[[2]] - 1.96*sqrt(mhb50)))
   uci50Exps <- rbind(uci50Exps, exp(areapred[[2]] + 1.96*sqrt(mhb50s)))
 
-  lci75Exps <- rbind(lci75Exps, exp(areapred[[3]] - 1.96*sqrt(mhb75s)))
-  uci75Exps <- rbind(uci75Exps, exp(areapred[[3]] + 1.96*sqrt(mhb75s)))
+  lci75Exps <- rbind(lci75Exps, exp(areapred[[3]] - 1.96*sqrt(mhb75)))
+  uci75Exps <- rbind(uci75Exps, exp(areapred[[3]] + 1.96*sqrt(mhb75)))
 
 
    
@@ -295,7 +295,7 @@ if(doBoot){
 
   ### Save the Image Every 10 Iterations
 
-  if(cnt%%10 == 0){ save.image("EvaluatePluginBoot/PluginBootExpRev1.Rdata") }	
+  if(cnt%%10 == 0){ save.image("EvaluatePluginBoot/RevBootTestForSim.Rdata") }	
   
   print(paste(cnt))
   
