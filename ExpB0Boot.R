@@ -279,14 +279,14 @@ if(doBoot){
 
 
 
-  lci25Exps <- rbind(lci25Exps, exp(areapred[[1]] - 1.96*sqrt(mhb25)))
-  uci25Exps <- rbind(uci25Exps, exp(areapred[[1]] + 1.96*sqrt(mhb25)))
+  lci25Exps <- rbind(lci25Exps, exp(areapred[[1]] - 1.96*sqrt(MSEhat25b)))
+  uci25Exps <- rbind(uci25Exps, exp(areapred[[1]] + 1.96*sqrt(MSEhat25b)))
 
-  lci50Exps <- rbind(lci50Exps, exp(areapred[[2]] - 1.96*sqrt(mhb50)))
-  uci50Exps <- rbind(uci50Exps, exp(areapred[[2]] + 1.96*sqrt(mhb50s)))
+  lci50Exps <- rbind(lci50Exps, exp(areapred[[2]] - 1.96*sqrt(MSEhat50b)))
+  uci50Exps <- rbind(uci50Exps, exp(areapred[[2]] + 1.96*sqrt(MSEhat50b)))
 
-  lci75Exps <- rbind(lci75Exps, exp(areapred[[3]] - 1.96*sqrt(mhb75)))
-  uci75Exps <- rbind(uci75Exps, exp(areapred[[3]] + 1.96*sqrt(mhb75)))
+  lci75Exps <- rbind(lci75Exps, exp(areapred[[3]] - 1.96*sqrt(MSEhat75b)))
+  uci75Exps <- rbind(uci75Exps, exp(areapred[[3]] + 1.96*sqrt(MSEhat75b)))
 
 
    
