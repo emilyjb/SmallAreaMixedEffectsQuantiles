@@ -3,10 +3,10 @@ This repository contains code to implement the small area estimation methodology
 ### Main simulation programs
 The following two programs produce output similar to the simulation output in the manuscript.
 * No transformation (Section 4.1): 
-    * SimForOrganizedCodeAttemptRevised.R -- run simulation
+    * SimulationNoTransformation.R -- run simulation
     * OutputNoTransformation.R -- tabulate output
 * With transformation (Section 4.2):
-    * SimForOrganizedCodeAttemptRevisedTestTransform.R -- run simulation
-    * OutputWithTransformation.R -- tabulate output SimForOrganizedCodeAttempt2TestTransform.R
+    * SimulationWithTransformation.R -- run simulation
+    * OutputWithTransformation.R -- tabulate output 
 ### Verification code and output
-To allow the user to verify that the code is working as expected, we saved a test data set in the Rdata file "TestDataSetNoTransformationSNErrorsNormalBs.Rdata." Output from applying the procedure to the test data set is saved in the excel file "SampleDataSetOutput.xlsx." The program "CodeToCompareToTestDataSets.R" reproduces the output in "SampleDataSetOutput.xlsx."
+To allow the user to verify that the code is working as expected, we saved a test data set in the Rdata file "TestDataSteNoTrans20Oct2018.Rdata." Output from applying the procedure to the test data set is saved in the excel file "SampleDataSetOutput.xlsx." The program "CodeToCompareToTestDataSets.R" reproduces the output in "SampleDataSetOutput.xlsx."

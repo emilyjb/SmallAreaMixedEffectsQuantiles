@@ -1,7 +1,7 @@
 rm(list=ls(all=TRUE))
 
 ##### Set the working directory to a folder that contains the files posted to the Github repository
-setwd("C:/Users/Emily/Documents/GitHub/Simulations/SmallAreaMixedEffectsQuantiles-CompareExpBoToBoExpPluginOpt")
+setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles"
 
 ### Load libraries
 library(nlme)
@@ -18,7 +18,7 @@ source("storoutputsimpleEMsim.R")		# Store output
 source("genpopmixedllcomb.R")			# Generate data
 source("transq1.R")				# For the transformation
 source("NEBfuns.R")				# For EBP predictors
-source("LIGPDfuns.R")			# For LIGPD predictors 
+source("LIGPDfuns.R")			      # For LIGPD predictors 
 source("LIGPDfuns_trans.R")			# For LIGPD predictors - Transformation
 source("Bootfuns.R")				# For Bootstrap MSE computation
 
