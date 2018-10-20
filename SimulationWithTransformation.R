@@ -295,7 +295,7 @@ if(doBoot){
 
   ### Save the Image Every 10 Iterations
 
-  if(cnt%%10 == 0){ save.image("EvaluatePluginBoot/RevBootTestForSim.Rdata") }	
+  if(cnt%%10 == 0){ save.image("FinalTestTrans.Rdata") }	
   
   print(paste(cnt))
   

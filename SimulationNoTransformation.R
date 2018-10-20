@@ -253,7 +253,7 @@ if(doBoot){
   }
   
   ### Save the Image Every 10 Iterations
-  if(cnt%%10 == 0){ save.image("ChiSquareENormalBOutputSortFixInit/ChiENormalBSortFixInit1.Rdata") }	
+  if(cnt%%10 == 0){ save.image("FinalTestNoTrans.Rdata") }	
   
   print(paste(cnt))
   
