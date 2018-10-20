@@ -1,123 +1,52 @@
-
-rm(list = ls(all = TRUE))
-#### Load in appropriate Rdata file; for example:
-
-load("SNTransBoot3Normal.Rdata")
-
-#### Set maximum number of iterations to use (typically, maxcnt <- cnt)
-maxcnt <- cnt 
-
-##########  Average MSE by area size
-
-MCMSETab10 <-rbind( tapply(apply((w10JCs[1:maxcnt,] - qhats.pop10[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((q10bs[1:maxcnt,] - qhats.pop10[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((EB.norm.10s[1:maxcnt,] - qhats.pop10[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp10[1:maxcnt,]) - qhats.pop10[1:maxcnt,])^2, 2, mean), nis, mean))
-rownames(MCMSETab10) <- c("LIGPD","ALD","NEB","Direct")
-
-MCMSETab25 <- rbind(tapply(apply((w25JCs[1:maxcnt,] - qhats.pop25[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((q25bs[1:maxcnt,] - qhats.pop25[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((EB.norm.25s[1:maxcnt,] - qhats.pop25[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp25[1:maxcnt,]) - qhats.pop25[1:maxcnt,])^2, 2, mean), nis, mean))
-rownames(MCMSETab25) <- c("LIGPD","ALD","NEB","Direct")
-
-MCMSETab50 <- rbind(tapply(apply((w50JCs[1:maxcnt,] - qhats.pop5[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((q5bs[1:maxcnt,] - qhats.pop5[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((EB.norm.50s[1:maxcnt,] - qhats.pop5[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp5[1:maxcnt,]) - qhats.pop5[1:maxcnt,])^2, 2, mean), nis, mean))
-rownames(MCMSETab50) <- c("LIGPD","ALD","NEB","Direct")
-
-MCMSETab75 <- rbind(tapply(apply((w75JCs[1:maxcnt,] - qhats.pop75[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((q75bs[1:maxcnt,] - qhats.pop75[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((EB.norm.75s[1:maxcnt,] - qhats.pop75[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp75[1:maxcnt,]) - qhats.pop75[1:maxcnt,])^2, 2, mean), nis, mean))
-rownames(MCMSETab75) <- c("LIGPD","ALD","NEB","Direct")
-
-MCMSETab90 <- rbind(tapply(apply((w90JCs[1:maxcnt,] - qhats.pop90[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((q90bs[1:maxcnt,] - qhats.pop90[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((EB.norm.90s[1:maxcnt,] - qhats.pop90[1:maxcnt,])^2, 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp90[1:maxcnt,]) - qhats.pop90[1:maxcnt,])^2, 2, mean), nis, mean))
-rownames(MCMSETab90) <- c("LIGPD","ALD","NEB","Direct")
+##########  Output for initial table of MC properties of predictors:
+maxcnt <- 200
 
 
+outmse1 <- cbind(tapply(apply( mhb25Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply( mhb25s[1:maxcnt,], 2, sd), nis[1:D[1]], mean)/sqrt(nrow(mhb25s[1:maxcnt,])*20)*100,
 
-##########  Average Bias by area size
+tapply(apply( uci25Exps[1:maxcnt,] >= qhats.pop25[1:maxcnt,]  & lci25Exps[1:maxcnt,] <= qhats.pop25[1:maxcnt,] , 2, mean), nis[1:D[1]], mean),
 
-MCBiasTab10 <- rbind(tapply(apply((w10JCs[1:maxcnt,] - qhats.pop10[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((q10bs[1:maxcnt,] - qhats.pop10[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((EB.norm.10s[1:maxcnt,] - qhats.pop10[1:maxcnt,]), 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp10[1:maxcnt,]) - qhats.pop10[1:maxcnt,])^2, 2, mean), nis, mean))
-rownames(MCBiasTab10) <- c("LIGPD","ALD","NEB","Direct")
-
-MCBiasTab25 <- rbind(tapply(apply((w25JCs[1:maxcnt,] - qhats.pop25[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((q25bs[1:maxcnt,] - qhats.pop25[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((EB.norm.25s[1:maxcnt,] - qhats.pop25[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp25[1:maxcnt,] ) - qhats.pop25[1:maxcnt,]), 2, mean), nis, mean))
-rownames(MCBiasTab25) <- c("LIGPD","ALD","NEB","Direct")
-
-MCBiasTab50 <- rbind(tapply(apply((w50JCs[1:maxcnt,] - qhats.pop5[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((q5bs[1:maxcnt,] - qhats.pop5[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((EB.norm.50s[1:maxcnt,] - qhats.pop5[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp5[1:maxcnt,]) - qhats.pop5[1:maxcnt,]), 2, mean), nis, mean))
-rownames(MCBiasTab50) <- c("LIGPD","ALD","NEB","Direct")
-
-MCBiasTab75 <- rbind(tapply(apply((w75JCs[1:maxcnt,] - qhats.pop75[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((q75bs[1:maxcnt,] - qhats.pop75[1:maxcnt,]), 2, mean), nis, mean),
-	tapply(apply((EB.norm.75s[1:maxcnt,] - qhats.pop75[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp75[1:maxcnt,]) - qhats.pop75[1:maxcnt,]), 2, mean), nis, mean))
-rownames(MCBiasTab75) <- c("LIGPD","ALD","NEB","Direct")
-
-MCBiasTab90 <- rbind(tapply(apply((w90JCs[1:maxcnt,] - qhats.pop90[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((q90bs[1:maxcnt,] - qhats.pop90[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((EB.norm.90s[1:maxcnt,] - qhats.pop90[1:maxcnt,]) , 2, mean), nis, mean),
-	tapply(apply((exp(qhats.samp90[1:maxcnt,]) - qhats.pop90[1:maxcnt,]), 2, mean), nis, mean))
-rownames(MCBiasTab90) <- c("LIGPD","ALD","NEB","Direct")
-
-##########  Output, including bootstrap bootstrap:
-
-outmse1 <- cbind(tapply(apply( mhb25s, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply( mhb25s, 2, sd), nis[1:D[1]], mean)/sqrt(nrow(mhb25s)*20)*100,
-tapply(apply( w25JCs  + sqrt(mhb25s)*1.96 > qhats.pop25  &  w25JCs  - sqrt(mhb25s)*1.96 < qhats.pop25 , 2, mean), nis[1:D[1]], mean),
-tapply(apply((qhats.pop25  - w25JCs)^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop25  - EB.norm.25s)^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop25  - q25bs)^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop25  - exp( qhats.samp25))^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop25  - w25JCs) , 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop25  - EB.norm.25s) , 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop25  - q25bs) , 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop25  -  exp(qhats.samp25)) , 2, mean), nis[1:D[1]], mean)*100 
+tapply(apply((qhats.pop25[1:maxcnt,]  - exp(w25JCs[1:maxcnt,]))^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop25[1:maxcnt,]  - EB.norm.25s[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop25[1:maxcnt,]  - q25bs[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop25[1:maxcnt,]  -  qhats.samp25[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop25[1:maxcnt,]  - exp(w25JCs[1:maxcnt,])) , 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop25[1:maxcnt,]  - EB.norm.25s[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop25[1:maxcnt,]  - q25bs[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop25[1:maxcnt,]  -  qhats.samp25[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean)*100 
 
 )
 
 
 
-outmse2 <- cbind(tapply(apply( mhb50s, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply( mhb50s, 2, sd), nis[1:D[1]], mean)/sqrt(nrow(mhb25s)*20)*100,
-tapply(apply( w50JCs  + sqrt(mhb50s)*1.96 > qhats.pop5  &  w50JCs  - sqrt(mhb50s)*1.96 < qhats.pop5 , 2, mean), nis[1:D[1]], mean),
-tapply(apply((qhats.pop5  - w50JCs)^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop5  - EB.norm.50s)^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop5  - q5bs)^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop5  - exp( qhats.samp5))^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop5  - w50JCs) , 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop5  - EB.norm.50s) , 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop5  - q5bs) , 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop5  - exp(qhats.samp5)) , 2, mean), nis[1:D[1]], mean)*100 
+outmse2 <- cbind(tapply(apply( mhb50Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply( mhb50s[1:maxcnt,], 2, sd), nis[1:D[1]], mean)/sqrt(nrow(mhb25s[1:maxcnt,])*20)*100,
+tapply(apply( uci50Exps[1:maxcnt,] >= qhats.pop5[1:maxcnt,]  & lci50Exps[1:maxcnt,] <= qhats.pop5[1:maxcnt,] , 2, mean), nis[1:D[1]], mean),
+tapply(apply((qhats.pop5[1:maxcnt,]  - exp(w50JCs[1:maxcnt,]))^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop5[1:maxcnt,]  - EB.norm.50s[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop5[1:maxcnt,]  - q5bs[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop5[1:maxcnt,]  -  qhats.samp5[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop5[1:maxcnt,]  - exp(w50JCs[1:maxcnt,])) , 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop5[1:maxcnt,]  - EB.norm.50s[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop5[1:maxcnt,] - q5bs[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop5[1:maxcnt,]  - qhats.samp5[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean)*100 
 )
 
 
 
  
-outmse3 <- cbind(tapply(apply( mhb75s, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply( mhb75s, 2, sd), nis[1:D[1]], mean)/sqrt(nrow(mhb25s)*20)*100,
-tapply(apply( w75JCs  + sqrt(mhb75s)*1.96 > qhats.pop75  &  w75JCs  - sqrt(mhb75s)*1.96 < qhats.pop75 , 2, mean), nis[1:D[1]], mean),
-tapply(apply((qhats.pop75  - w75JCs)^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop75  - EB.norm.75s)^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop75  - q75bs)^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop75  -  exp(qhats.samp75))^2, 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop75  - w75JCs), 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop75  - EB.norm.75s), 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop75  - q75bs), 2, mean), nis[1:D[1]], mean)*100,
-tapply(apply((qhats.pop75  -  exp(qhats.samp75)) , 2, mean), nis[1:D[1]], mean)*100 
+outmse3 <- cbind(tapply(apply( mhb75Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply( mhb75s[1:maxcnt,], 2, sd), nis[1:D[1]], mean)/sqrt(nrow(mhb25s[1:maxcnt,])*20)*100,
+tapply(apply( uci75Exps[1:maxcnt,] >= qhats.pop75[1:maxcnt,]  &   lci75Exps[1:maxcnt,] <=qhats.pop75[1:maxcnt,] , 2, mean), nis[1:D[1]], mean),
+tapply(apply((qhats.pop75[1:maxcnt,]  - exp(w75JCs[1:maxcnt,]))^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop75[1:maxcnt,]  - EB.norm.75s[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop75[1:maxcnt,]  - q75bs[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop75[1:maxcnt,]  -  qhats.samp75[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop75[1:maxcnt,]  - exp(w75JCs[1:maxcnt,])), 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop75[1:maxcnt,]  - EB.norm.75s[1:maxcnt,]), 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop75[1:maxcnt,]  - q75bs[1:maxcnt,]), 2, mean), nis[1:D[1]], mean)*100,
+tapply(apply((qhats.pop75[1:maxcnt,]  -  qhats.samp75[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean)*100 
 )
 
 
@@ -131,4 +60,15 @@ rbind(outmse1, outmse2, outmse3)
 
 library("xtable")
 xtable(rbind(outmse1, outmse2, outmse3)[,-2], digits = 3)
+
+
+apply(rbind(outmse1, outmse2, outmse3)[,c(4,1)], 1, diff)/rbind(outmse1, outmse2, outmse3)[,c(4)]*100
+
+RBOutput <- matrix(apply(rbind(outmse1, outmse2, outmse3)[,c(4,1)], 1, diff)/rbind(outmse1, outmse2, outmse3)[,c(4)]*100, ncol = 3, byrow = TRUE)
+CovOutput <-  matrix(rbind(outmse1, outmse2, outmse3)[,3], nrow = 3, byrow = TRUE)
+
+cbind(RBOutput, CovOutput)
+
+(rbind(outmse1, outmse2, outmse3)[,8]/100)^2/(rbind(outmse1, outmse2, outmse3)[,4]/100)
+
 
