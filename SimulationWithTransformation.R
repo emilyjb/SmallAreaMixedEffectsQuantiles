@@ -1,7 +1,7 @@
 rm(list=ls(all=TRUE))
 
 ##### Set the working directory to a folder that contains the files posted to the Github repository
-setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles"
+setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
 
 ### Load libraries
 library(nlme)
