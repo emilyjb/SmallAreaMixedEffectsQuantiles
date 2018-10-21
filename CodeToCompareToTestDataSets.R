@@ -2,7 +2,7 @@ rm(list = ls(all = TRUE))
 
 #####  Load test data set:
 
-load("TestDataSetNoTransformationSNErrorsNormalBs2.Rdata")
+load("TestDataSteNoTrans20Oct2018.Rdata" )
 
 ###  Load libraries
 library(nlme)
@@ -103,11 +103,6 @@ cl <- makeCluster(getOption ("cl.cores", 2))  	#Can increase the number of clust
   t.min <- min(all.q)
   t.max <- max(all.q)	
   t.seq <- seq(t.min, t.max, length = 100)
-
-  ##########  Estimate CDF for conditional normal distribution (not used) 
-  cdf.norm.all <- sapply(t.seq, cnp, mean.cond, sqrt(var.cond))
-  cdf.smc <- sapply(t.seq, function(t){ ifelse(lys <= t, 1, 0)})
-  cdf.norm.all[smc,] <- cdf.smc
 
   ########## Implement EBP, as described in Remark 2 of Molina and Rao (2010): 
   ########## Simulate a population from the conditional normal distribution (step b of Remark 2)

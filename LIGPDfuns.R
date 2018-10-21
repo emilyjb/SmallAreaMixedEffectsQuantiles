@@ -1,3 +1,20 @@
+intparfunSort <- function(dat.temp, X, areafac.samp, D, Gs, tauvec, lxN, use.cl = TRUE){
+  
+  lm1med <- rq(dat.temp$Y~X + as.factor(areafac.samp), tau = 0.5)
+  bhats <-  summary.rq(lm1med, se = "ker")$coefficients[,"Value"][-c(1,2)]
+  vbhat <-  summary.rq(lm1med, se = "ker")$coefficients[,"Std. Error"][-c(1,2)]^2
+  sig2bhat <- betahat.glsfun(vbhat, bhats , 2, matrix(1,nrow = D-1), bhats)[[2]]
+
+  dat.temp$dev <- dat.temp$Y - as.vector(Gs%*%c( bhats,  -sum(bhats)))
+  fit.init <- rq(dev~X, data = dat.temp, tau = tauvec)
+  paravec <- c(as.vector(fit.init$coef), c( bhats,  -sum(bhats)))
+  XBhat.init <- cbind(1, lxN)%*%fit.init$coef
+  XBhat.init1 <- t( apply( XBhat.init, 1, sort))
+ 
+  list(beta = fit.init$coef, sig2bhat= sig2bhat, bhats = bhats, XBinit = XBhat.init1)
+}
+
+
 intparfun <- function(dat.temp, X, areafac.samp,D, Gs, tauvec, lxN, use.cl = TRUE){
   
   lm1med <- rq(dat.temp$Y~X + as.factor(areafac.samp), tau = 0.5)

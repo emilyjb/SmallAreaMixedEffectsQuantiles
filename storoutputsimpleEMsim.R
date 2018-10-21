@@ -1,4 +1,20 @@
 
+   mhb25Exps <- c()
+   mhb50Exps  <-c()
+   mhb75Exps  <- c()
+
+
+
+  lci25Exps <- c()
+  uci25Exps <- c()
+
+  lci50Exps <-c()
+  uci50Exps <- c()
+
+  lci75Exps <- c()
+  uci75Exps <- c()
+
+
 
 yhati1syns <- c()
 yhati1synkbs <- c()

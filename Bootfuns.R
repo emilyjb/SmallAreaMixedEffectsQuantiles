@@ -102,11 +102,11 @@ par.bootestsimple1=function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN,
 
 par.bootestsimple1Rev =function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN, b.dist, areafac.pop, smc, use.cl, trunc =FALSE){
 
-  initpars <- intparfun(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
+  initpars <- intparfunSort(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
 
   rholxilrhouxiu <- gpdparMatch(initpars$XBinit[smc,], dat.tempb, tauvec)
 
-  XBbetasiguupdate <- par.updatebetasig2bfun(tauvec,dat.tempb, initpars$sig2bhat, b.dist, initpars$beta,rholxilrhouxiu , areafac.pop, smc, initpars$XBinit[smc,], Gs, lxN, use.cl, Rb )
+  XBbetasiguupdate <- par.updatebetasig2bfunSortFix(tauvec,dat.tempb, initpars$sig2bhat, b.dist, initpars$beta,rholxilrhouxiu , areafac.pop, smc, initpars$XBinit[smc,], Gs, lxN, use.cl, Rb )
 
   sig2bhatupdate <- XBbetasiguupdate[[3]]
   betahat <- XBbetasiguupdate[[2]]
@@ -114,7 +114,7 @@ par.bootestsimple1Rev =function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, 
 
   rholxilrhouxiu <- gpdparMatch(XBhatupdate[smc,], dat.tempb, tauvec)
 
-  XBbetasiguupdate <- par.updatebetasig2bfun(tauvec,dat.tempb, sig2bhatupdate, b.dist, betahat,rholxilrhouxiu , areafac.pop, smc, XBhatupdate[smc,], Gs, lxN, use.cl, Rb )
+  XBbetasiguupdate <- par.updatebetasig2bfunSortFix(tauvec,dat.tempb, sig2bhatupdate, b.dist, betahat,rholxilrhouxiu , areafac.pop, smc, XBhatupdate[smc,], Gs, lxN, use.cl, Rb )
 
   sig2bhatupdate <- XBbetasiguupdate[[3]]
   betahat <- XBbetasiguupdate[[2]]
@@ -284,7 +284,7 @@ bootgensimple2trans <- function(sig2bhat.update, GN, XBhat.update1, CNis, nis, D
 
 par.bootestsimple2FixSortTrans <- function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN, b.dist, areafac.pop, smc, use.cl, trunc =FALSE, lam){
   
-  initpars <- intparfun(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
+  initpars <- intparfunSort(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
   
   rholxilrhouxiu <- gpdparMatch(initpars$XBinit[smc,], dat.tempb, tauvec)
   
@@ -304,37 +304,35 @@ par.bootestsimple2FixSortTrans <- function(dat.tempb, X, areafac.samp, D, Gs, ta
   
 }
 
-
-par.updatebetasig2bfunSortFix <-  function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XB.init, Gs, lxN, use.cl= TRUE, Rb = 150 ){
+par.updatebetasig2bfunSortFix <- function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XB.init, Gs, lxN, use.cl= TRUE, Rb = 150 ){
   seq.points <- qnorm(tauvec, mean = 0, sd = sqrt(sig2bhat))
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
-    if(bdist == "Laplace"){
-      clusterExport(cl, c("seq.points", "lys",  "tauvec", "rhohat.l", "xi.l", "rhohat.u", "xi.u", "areafac.pop", "smc", "sig2bhat","dlp", "XB.init", 
-	 "comp.term", "gpd.dens", "compfall.b1forintplaplace","lXs","dgpd") , envir = environment())
-    	out=parSapply(cl, 1:D, FUN = ianumden.mvdpfixlaplace2, seq.points, lys, betahat, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sqrt(sig2bhat), XB.init)
-	}
-    if(bdist == "Normal"){
-      clusterExport(cl, c("seq.points", "lys",  "tauvec", "rhohat.l", "xi.l", "rhohat.u", "xi.u", "areafac.pop", "smc", "sig2bhat","dlp", "XB.init", 
-	"comp.term", "gpd.dens", "compfall.b1forintp" ,"lXs","dgpd"), envir =   environment())
-      out=parSapply(cl, 1:D, FUN = ianumden.mvdpfix2, seq.points, lys, betahat, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sqrt(sig2bhat), XB.init)
-
-    }
-
-	num.mub=out[1,]
-	num.vb=out[2,]
-	den.mub=out[3,]
-	
-	mub.cond=num.mub/den.mub
-	vebcond=num.vb/den.mub
-
+  if(bdist == "Laplace"){
+    clusterExport(cl, c("seq.points", "lys",  "tauvec", "rhohat.l", "xi.l", "rhohat.u", "xi.u", "areafac.pop", "smc", "sig2bhat","dlp", "XB.init", 
+                        "comp.term", "gpd.dens", "compfall.b1forintplaplace","lXs","dgpd") , envir = environment())
+    out=parSapply(cl, 1:D, FUN = ianumden.mvdpfixlaplace, seq.points, lys, betahat, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sqrt(sig2bhat), XB.init)
+  }
+  if(bdist == "Normal"){
+    clusterExport(cl, c("seq.points", "lys",  "tauvec", "rhohat.l", "xi.l", "rhohat.u", "xi.u", "areafac.pop", "smc", "sig2bhat","dlp", "XB.init", 
+                        "comp.term", "gpd.dens", "compfall.b1forintp" ,"lXs","dgpd"), envir =   environment())
+    out=parSapply(cl, 1:D, FUN = ianumden.mvdpfix, seq.points, lys, betahat, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sqrt(sig2bhat), XB.init)
+    
+  }
+  
+  num.mub=out[1,]
+  num.vb=out[2,]
+  den.mub=out[3,]
+  
+  mub.cond=num.mub/den.mub
+  vebcond=num.vb/den.mub
+  
   sig2bhat.update <-  mean(vebcond)*D/(D-(dim(cbind(1,lxN))[2]))
   dat.temp$dev <- dat.temp$Y - as.vector(Gs%*%mub.cond)
   fit.update <- rq(dev~X, data = dat.temp, tau = tauvec)
   betahats.update <- fit.update$coef
   XBhat.update <- cbind(1, lxN)%*%betahats.update
   XBhat.update1 <- t(apply( XBhat.update , 1,sort))
-  
   list(XBhat.update1, betahats.update, sig2bhat.update, mub.cond, vebcond)
 }
 
@@ -344,7 +342,7 @@ par.updatebetasig2bfunSortFix <-  function(tauvec, dat.temp, sig2bhat, bdist, be
 
 par.bootestsimple2FixSortTransRev <- function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, lxN, b.dist, areafac.pop, smc, use.cl, trunc =FALSE, lam){
   
-  initpars <- intparfun(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
+  initpars <- intparfunSort(dat.tempb, X, areafac.samp,D, Gs,tauvec,  lxN, use.cl)
   
   rholxilrhouxiu <- gpdparMatch(initpars$XBinit[smc,], dat.tempb, tauvec)
   
@@ -357,7 +355,7 @@ par.bootestsimple2FixSortTransRev <- function(dat.tempb, X, areafac.samp, D, Gs,
  
  rholxilrhouxiu <- gpdparMatch(XBhatupdate[smc,], dat.tempb, tauvec)
 
-    XBbetasiguupdate <- par.updatebetasig2bfunSortFix(tauvec,dat.tempb, initpars$sig2bhat, b.dist, initpars$beta,rholxilrhouxiu , areafac.pop, smc, initpars$XBinit[smc,], Gs, lxN, use.cl, Rb )
+    XBbetasiguupdate <- par.updatebetasig2bfunSortFix(tauvec,dat.tempb, sig2bhatupdate, b.dist, betahat,rholxilrhouxiu , areafac.pop, smc, XBhatupdate[smc,], Gs, lxN, use.cl, Rb )
 
   
   sig2bhatupdate <- XBbetasiguupdate[[3]]
