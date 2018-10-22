@@ -79,5 +79,5 @@ cnt <- 0;
   u.pops <- rbind(u.pops, u.pop)
   dat.temp <- data.frame(Y = lys, X = lXs[,2], area = areafac.pop[smc])
 
-  save.image("TestDataSteNoTrans20Oct2018.Rdata")
+  save.image("TestDataSetNoTrans20Oct2018.Rdata")
 
