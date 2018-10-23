@@ -1,5 +1,12 @@
+rm(list = ls(all = TRUE))
+
+####  Load output file. For example:
+load("FinalTestTrans.Rdata")
+
 ##########  Output for initial table of MC properties of predictors:
-maxcnt <- 200
+
+########## Set number of iterations to use
+maxcnt <- cnt
 
 
 outmse1 <- cbind(tapply(apply( mhb25Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,

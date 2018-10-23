@@ -3,10 +3,10 @@
 rm(list = ls(all = TRUE))
 #### Load in appropriate Rdata file; for example:
 
-load("SNOutputInterpF1LaplaceFix_temp90.Rdata")
+load("FinalTestNoTrans.Rdata")
 
 #### Set maximum number of iterations to use (typically, maxcnt <- cnt)
-maxcnt <- 100
+maxcnt <- cnt
 
 ##########  Average MSE by area size
 
@@ -77,6 +77,7 @@ rownames(MCBiasTab90) <- c("LIGPD","ALD","NEB","Direct")
 
 MCBiasTabAll <- rbind(MCBiasTab10, MCBiasTab25, MCBiasTab50, MCBiasTab75, MCBiasTab90)
 
+library("xtable")
 xtable(cbind(MCMSETabAll, MCBiasTabAll)[,c(1,4,2,5,3,6)], digits = 4)
 
 
