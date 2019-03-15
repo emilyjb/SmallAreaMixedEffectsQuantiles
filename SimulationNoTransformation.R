@@ -3,7 +3,6 @@ rm(list=ls(all=TRUE))
 ### Set your working directory to the folder that contains the files posted to Github. For example:
 setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
 
-
 ###  Load libraries
 library(nlme)
 library("lqmm")
