@@ -59,7 +59,7 @@ lam <- 0
 e.dist <- "SN"  ### Other options are "Chi" or "T"
 ####### Area random effect distribution
 b.dist <- "Normal"  ###  Other option is "Laplace"
-doBoot <- TRUE  #### Change to FALSE to skip bootstrap
+doBoot <- FALSE  #### Change to FALSE to skip bootstrap
 
 time.start.all <- Sys.time()
 
@@ -165,7 +165,7 @@ repeat{
   gammais <- sig2uhatmc/(sig2uhatmc + sig2ehatmc/nis)
   mu.dev <- as.vector(gammais*(lbarsi - dbarsi%*%betahatmc))
   mean.cond <- lXN%*%betahatmc + GN%*%(mu.dev) 
-  var.cond <- GN%*%(gammais*sig2ehatmc) + sig2ehatmc
+  var.cond <- GN%*%(gammais*sig2ehatmc/nis) + sig2ehatmc
 
   t.min <- min(all.q)
   t.max <- max(all.q)	
@@ -295,7 +295,7 @@ if(doBoot){
 
   ### Save the Image Every 10 Iterations
 
-  if(cnt%%10 == 0){ save.image("FinalTestTrans.Rdata") }	
+  if(cnt%%10 == 0){ save.image("SNENormalBTrans1.Rdata") }	
   
   print(paste(cnt))
   
