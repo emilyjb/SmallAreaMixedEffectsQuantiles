@@ -1,7 +1,8 @@
 rm(list=ls(all=TRUE))
 
 ### Set your working directory to the folder that contains the files posted to Github. For example:
-setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
+setwd("G:/Researchers-Investigators/Berg/BaseCodeQRSAE/SmallAreaMixedEffectsQuantilesRevSeqPoints")
+
 
 ###  Load libraries
 library(nlme)
@@ -11,7 +12,8 @@ library("survey")
 library("quantreg")
 library("sn")
 library("eva")
- 
+library("rmutil")
+
 ### Source the following R files
 source("storoutputsimpleEMsim.R") 		# Store output
 source("genpopmixedllcomb.R")			# Generate data
@@ -48,9 +50,11 @@ mulx <- 0
 sig2lx <- 1
 
 ####  Set distribution options:
-e.dist <- "Chi" ##( Other options are "T" for t distribution or "Chi" for chi-square)
-b.dist <- "Normal"  ##( Other option is "Laplace")
-doBoot <- TRUE   ##(Change to "FALSE" to skip running bootstrap.)
+edistfun <- SNgenfun ##( Other option used in manuscript is "chigenfunH" used for chi-sqaure)
+e.parms <- -5 # For chi-square used in manuscript, change e-distribution parameters to (2, 0.1) 
+bdistfun <- laplacegenfun ##(Options in manuscript are "laplacegenfun" for "Laplace" and "normalbgenfun" for "Normal")
+b.dist <- "Laplace" ##(Change to "Normal" for normal bi.)
+doBoot <- TRUE  ##(Change to "FALSE" to skip running bootstrap.)
 
 time.start.all <- Sys.time()
 
@@ -69,7 +73,7 @@ repeat{
   lXN <- cbind(rep(1,N), lxN)
   
   ## Generate data from model and select sample
-  popllmc <- genpopmixedll.comb.ebdist(D, CNis, sig2le, sig2lu,beta0, beta1, Nis, lxN, GN,  2, e.dist, b.dist, 0.75)
+  popllmc <- genpopmixedll.comb.ebdistfuns(D, CNis,edistfun ,e.parms ,bdistfun, sig2lu, lxN, GN, beta0, beta1)
   smc <- popllmc[[4]]; lyNmc <- popllmc[[1]]; yNmc <- popllmc[[2]]; ybarNis <- popllmc[[3]]
   q.pop <- as.vector(popllmc[[5]])	
   lys <- lyNmc[smc]
@@ -77,7 +81,9 @@ repeat{
   u.pop <- popllmc[[6]]
   u.pops <- rbind(u.pops, u.pop)
   dat.temp <- data.frame(Y = lys, X = lXs[,2], area = areafac.pop[smc])
-
+ # resyx <- residuals(lm(dat.temp$Y~dat.temp$X))
+ #  qqnorm(resyx)
+ #  shapiro.test(resyx)
   ##### ###### ####### ######### ########  ALD Procedure  ########  ######## ######## ######## ######## ######## 
   qVecAld  <- seq(0.01, 0.99, by = 0.01)
 
@@ -156,7 +162,10 @@ repeat{
   gammais <- sig2uhatmc/(sig2uhatmc + sig2ehatmc/nis)
   mu.dev <- as.vector(gammais*(lbarsi - dbarsi%*%betahatmc))
   mean.cond <- lXN%*%betahatmc + GN%*%(mu.dev) 
-  var.cond <- GN%*%(gammais*sig2ehatmc) + sig2ehatmc
+  var.cond <- GN%*%(gammais*sig2ehatmc/nis) + sig2ehatmc
+
+  mudevs <- rbind(mudevs, mu.dev)
+
 
   t.min <- min(all.q)
   t.max <- max(all.q)	
@@ -252,11 +261,11 @@ if(doBoot){
   }
   
   ### Save the Image Every 10 Iterations
-  if(cnt%%10 == 0){ save.image("FinalTestNoTrans.Rdata") }	
+  if(cnt%%10 == 0){ save.image("SNELaplaceBTestSeqPoints3-4-2019Part1.Rdata")  }	
   
   print(paste(cnt))
   
-  if(cnt == 100){break}
+  if(cnt == 200){break}
   
 }
 

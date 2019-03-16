@@ -1,7 +1,8 @@
 rm(list=ls(all=TRUE))
 
 ##### Set the working directory to a folder that contains the files posted to the Github repository
-setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
+setwd("G:/Researchers-Investigators/Berg/BaseCodeQRSAE/SmallAreaMixedEffectsQuantilesRevSeqPoints")
+
 
 ### Load libraries
 library(nlme)
@@ -59,7 +60,7 @@ lam <- 0
 e.dist <- "SN"  ### Other options are "Chi" or "T"
 ####### Area random effect distribution
 b.dist <- "Normal"  ###  Other option is "Laplace"
-doBoot <- FALSE  #### Change to FALSE to skip bootstrap
+doBoot <- TRUE #### Change to FALSE to skip bootstrap
 
 time.start.all <- Sys.time()
 
@@ -68,6 +69,7 @@ library("parallel")
 cl <- makeCluster(getOption ("cl.cores", 2))
 
 repeat{
+
   cnt <- cnt + 1
   
   # Generate  x_ij
@@ -292,10 +294,10 @@ if(doBoot){
    
   }
   
-
+  
   ### Save the Image Every 10 Iterations
-
-  if(cnt%%10 == 0){ save.image("SNENormalBTrans1.Rdata") }	
+  
+  if(cnt%%10 == 0){ save.image("SNENormalBTransFixEBBoot3-12-2019RevSeqPoints1.Rdata") }	
   
   print(paste(cnt))
   

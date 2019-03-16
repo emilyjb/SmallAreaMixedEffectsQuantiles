@@ -200,7 +200,14 @@ estconstrained <- function(dat.temp, fml, tauvec){
 
 
 par.updatebetasig2bfunConstrFix=function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XB.init, Gs, lxN, use.cl= TRUE, Rb = 150 ){
-  seq.points <- qnorm(tauvec, mean = 0, sd = sqrt(sig2bhat))
+  if(bdist == "Normal"){
+        tauvecseq <- (1:999)/1000
+	  seq.points <- qnorm(tauvecseq, mean = 0, sd = sqrt(sig2bhat))
+  }
+  if(bdist == "Laplace"){
+        tauvecseq <- (1:999)/1000
+ 	  seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat/2))
+  }
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
     if(bdist == "Laplace"){
@@ -231,7 +238,14 @@ par.updatebetasig2bfunConstrFix=function(tauvec, dat.temp, sig2bhat, bdist, beta
 
 
 par.predJWFix <-  function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XBhat.update1, Gs, lxN, use.cl= TRUE, Rb = 150 , trunc = FALSE, lam){
-  seq.points <- qnorm(tauvec, mean = 0, sd = sqrt(sig2bhat))
+  if(bdist == "Normal"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qnorm(tauvecseq, mean = 0, sd = sqrt(sig2bhat))
+  }
+  if(bdist == "Laplace"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat/2))
+  }
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
      if(bdist == "Laplace"){
@@ -306,3 +320,51 @@ dlp <- function(t, mean, sd){
 	b <- sqrt(sd^2/2)
 	exp(-abs(t - mean)/b)/2/b
 }
+
+
+
+
+
+par.updatebetasig2bfunSortFix=function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XB.init, Gs, lxN, use.cl= TRUE, Rb = 150 ){
+  if(bdist == "Normal"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qnorm(tauvecseq, mean = 0, sd = sqrt(sig2bhat))
+  }
+  if(bdist == "Laplace"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat/2))
+  }
+  lys <- dat.temp$Y
+  rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
+    if(bdist == "Laplace"){
+      clusterExport(cl, c("seq.points", "lys",  "tauvec", "rhohat.l", "xi.l", "rhohat.u", "xi.u", "areafac.pop", "smc", "sig2bhat","dlp", "XB.init", 
+	 "comp.term", "gpd.dens", "compfall.b1forintplaplace","lXs","dgpd") , envir = environment())
+    	out=parSapply(cl, 1:D, FUN = ianumden.mvdpfixlaplace, seq.points, lys, betahat, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sqrt(sig2bhat), XB.init)
+	}
+    if(bdist == "Normal"){
+      clusterExport(cl, c("seq.points", "lys",  "tauvec", "rhohat.l", "xi.l", "rhohat.u", "xi.u", "areafac.pop", "smc", "sig2bhat","dlp", "XB.init", 
+	"comp.term", "gpd.dens", "compfall.b1forintp" ,"lXs","dgpd"), envir =   environment())
+      out=parSapply(cl, 1:D, FUN = ianumden.mvdpfix, seq.points, lys, betahat, tauvec, rhohat.l, xi.l, rhohat.u, xi.u, areafac.pop, smc, sqrt(sig2bhat), XB.init)
+
+    }
+
+	num.mub=out[1,]
+	num.vb=out[2,]
+	den.mub=out[3,]
+	
+	mub.cond=num.mub/den.mub
+	vebcond=num.vb/den.mub
+
+  sig2bhat.update <-  mean(vebcond)*D/(D-(dim(cbind(1,lxN))[2]))
+  dat.temp$dev <- dat.temp$Y - as.vector(Gs%*%mub.cond)
+ ## betahats.update <- estconstrained(dat.temp, as.formula("dev~X"),   tauvec)
+##  XBhat.update1 <- cbind(1, lxN)%*%betahats.update
+
+  fit.init <- rq(dev~X, data = dat.temp, tau = tauvec)
+  XBhat.init <- cbind(1, lxN)%*%fit.init$coef
+  XBhat.init1 <- t( apply( XBhat.init, 1, sort))
+ 
+
+  list(XBhat.update1, betahats.update, sig2bhat.update, mub.cond, vebcond)
+}
+

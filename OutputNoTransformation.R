@@ -3,10 +3,12 @@
 rm(list = ls(all = TRUE))
 #### Load in appropriate Rdata file; for example:
 
-load("FinalTestNoTrans.Rdata")
+###################    load("SNELaplaceBTestSeqPoints2-23-2019Part1.Rdata")
+
+load("RevisionNovember2018/RevisedEBSims/OutputRevInterpNoTrans/SNENormalBTestSeqPoints2-23-2019Part1.Rdata")
 
 #### Set maximum number of iterations to use (typically, maxcnt <- cnt)
-maxcnt <- cnt
+maxcnt <-sum( cnt)
 
 ##########  Average MSE by area size
 
@@ -79,7 +81,7 @@ MCBiasTabAll <- rbind(MCBiasTab10, MCBiasTab25, MCBiasTab50, MCBiasTab75, MCBias
 
 library("xtable")
 xtable(cbind(MCMSETabAll, MCBiasTabAll)[,c(1,4,2,5,3,6)], digits = 4)
-
+cbind(MCMSETabAll, MCBiasTabAll)[,c(1,4,2,5,3,6)]
 
 ##########  Output, including bootstrap bootstrap:
 

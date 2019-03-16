@@ -54,8 +54,7 @@ interpk <- function(  i,ks, ys,  all.q.Jsamp){
 	}
 }
 
-
-interpkreverse <- function(i, ks, taus, tauvec, all.q.Jpop){
+interpkreverseOld <- function(i, ks, taus, tauvec, all.q.Jpop){
 	if(ks[i] == Inf){
 		return(1)
 	}
@@ -68,6 +67,23 @@ interpkreverse <- function(i, ks, taus, tauvec, all.q.Jpop){
 	}else{
 		all.q.Jpop[i,ks[i]-1] + (taus[i] - tauvec[ks[i]-1])*( (all.q.Jpop[i,ks[i]] - all.q.Jpop[i,ks[i]-1])/( tauvec[ks[i]] - tauvec[ks[i]-1]))
 	}
+}
+
+
+
+interpkreverse <- function(i, ks, taus, tauvec, all.q.Jpop){
+	if(ks[i] == Inf){
+		return(1)
+	}
+	if(ks[i] == 1){
+		return(0)
+	}
+	checkdiff <- all.q.Jpop[i,ks[i]] - all.q.Jpop[i,ks[i]-1]
+	#if(abs(checkdiff) < 10^-5){
+	#	all.q.Jpop[i,ks[i]-1]
+	#}else{
+		all.q.Jpop[i,ks[i]-1] + (taus[i] - tauvec[ks[i]-1])*( (all.q.Jpop[i,ks[i]] - all.q.Jpop[i,ks[i]-1])/( tauvec[ks[i]] - tauvec[ks[i]-1]))
+	#}
 }
 
 
@@ -135,7 +151,7 @@ par.bootestsimple1Rev =function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, 
 
 
 par.updatebetasig2bfun=function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XB.init, Gs, lxN, use.cl= TRUE, Rb = 150 ){
-  seq.points <- qnorm(tauvec, mean = 0, sd = sqrt(sig2bhat))
+  seq.points <- qnorm((1:999)/1000, mean = 0, sd = sqrt(sig2bhat))
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
     if(bdist == "Laplace"){
@@ -203,7 +219,7 @@ gen.bcond <- function(D, cdf.out, seq.points){
 
 
 par.predJW=function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XBhat.update1, Gs, lxN, use.cl= TRUE, Rb = 150 , trunc = FALSE){
-  seq.points <- qnorm(tauvec, mean = 0, sd = sqrt(sig2bhat))
+  seq.points <- qnorm((1:999)/1000, mean = 0, sd = sqrt(sig2bhat))
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
     if(bdist == "Laplace"){
@@ -305,7 +321,14 @@ par.bootestsimple2FixSortTrans <- function(dat.tempb, X, areafac.samp, D, Gs, ta
 }
 
 par.updatebetasig2bfunSortFix <- function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XB.init, Gs, lxN, use.cl= TRUE, Rb = 150 ){
-  seq.points <- qnorm(tauvec, mean = 0, sd = sqrt(sig2bhat))
+  if(bdist == "Normal"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qnorm(tauvecseq, mean = 0, sd = sqrt(sig2bhat))
+  }
+  if(bdist == "Laplace"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat/2))
+  }
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
   if(bdist == "Laplace"){
