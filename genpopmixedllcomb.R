@@ -1,8 +1,123 @@
+tgenfun <- function(N, dfpick){
+    leN <- (rt(N, df = dfpick) )/sqrt(dfpick/(dfpick - 2))
+	leN
+ }
+
+chigenfunH <- function(N, dfpickcoef){
+	dfpick <- dfpickcoef[1]
+	coef <- dfpickcoef[2]
+      leN <- (rchisq(N, df = dfpick)-dfpick)/sqrt(2*dfpick)*(1+coef*lxN)
+	leN
+}
 
 
-####  genpopmixedllf
+SNgenfun <- function(N, alpha){
+    delta <- alpha/sqrt(1+alpha^2)
+     w <- sqrt(1/(1-2*delta^2/pi))
+      xi <- -w*delta*sqrt(2/pi)
+	leN <- rsn(N,  xi, w, alpha)
+	leN
+}
 
-genpopmixedll.comb.ebdist <- function(D, CNis, sig2le, sig2lu, mull0, beta1, Nis, lxN, GN, dfpick, type, bdist, tau){
+chimixgenfun <- function(N, prob){
+	leN <- rnorm(N, mean = 0, sd = 1)*prob + ( rchisq(N, df = 2) - 2)/4*(1 - prob)/2 - ( rchisq(N, df = 1) - 1)/4*(1 - prob)/2
+	leN
+}
+
+
+mixnormgenfun <- function(N, probvar){
+	leN <- rnorm(N, 0, 1)*probvar[1] + rnorm(N, 0, probvar[2])*(1-probvar[1])
+	leN
+}
+
+
+
+laplacegenfun <- function(D, sig2lu){
+     Ul <- runif(D, -0.5, 0.5)
+     b <- sqrt(sig2lu/2)
+     uis <- -b*sign(Ul)*log(1 - 2*abs(Ul))
+     uis
+}
+
+laplacegenfun2 <- function(D, sig2lu){
+	b <- sqrt(sig2lu/2)
+	rlaplace(D, m = 0, s = b)
+}
+
+
+normalbgenfun <- function(D, sig2lu){
+    uis <- rnorm(D)*sqrt(sig2lu) 
+    uis
+}
+
+  
+
+SNmixgenfun <- function(N, proba1a2 ){
+      prob <- proba1a2[1]
+      alpha <- proba1a2[2]
+      delta <- alpha/sqrt(1+alpha^2)
+      w <- sqrt(1/(1-2*delta^2/pi))
+      xi <- -w*delta*sqrt(2/pi)
+	leN1 <- rsn(N,  xi, w, alpha)
+      alpha <- proba1a2[3]
+      delta <- alpha/sqrt(1+alpha^2)
+      w <- sqrt(1/(1-2*delta^2/pi))
+      xi <- -w*delta*sqrt(2/pi)
+	leN2 <- rsn(N,  xi, w, alpha)
+      indicat <- rbinom(N, prob = prob, size = 1)
+	leN <- indicat*leN1 + (1-indicat)*leN2
+}
+
+
+genpopmixedll.comb.ebdistfunsInf <- function(D, CNis,edistfun, eparms, bdistfun, bparms, lxN, GN, beta0, beta1){
+   N <- CNis[D]
+   leN <- edistfun(N, eparms)
+ uis <- bdistfun(D, bparms)
+  luN <- GN%*%(uis)
+  lyN <- beta0 + beta1*lxN + luN + leN*sqrt(sig2le)
+  YN <- exp(lyN)
+  YbarNis <- t(GN)%*%YN/Nis
+  qij <-   ( beta0 + beta1*lxN + luN) + qt(0.75, df=5)
+  #zij <- exp(-(lyN - beta0 - beta1*lxN)/3 + luN/15)
+  zij <- exp(-(lyN - beta0 - beta1*lxN) + rnorm(N, mean = 0, sd = 0.1))
+  areafacpop <- as.vector(GN%*%(1:D))
+  zisum <- tapply(zij, areafacpop, sum)
+  nispop <- as.vector(GN%*%nis)
+  pij <- zij/as.vector(GN%*%zisum)*nispop
+  s <- which(UPsystematic(pij[1:CNis[1]])==1)
+  i <- 1
+  repeat{
+    i <- i + 1
+    s <- c(s, CNis[(i-1)]+ which(UPsystematic(pij[(CNis[(i-1)] +1):CNis[i]])==1))
+    if(i == D){break}
+  }
+  list(lyN, YN, YbarNis, s, qij, uis, pij)
+}
+
+
+
+
+genpopmixedll.comb.ebdistfuns <- function(D, CNis,edistfun, eparms, bdistfun, bparms, lxN, GN, beta0, beta1){
+   N <- CNis[D]
+   leN <- edistfun(N, eparms)
+ uis <- bdistfun(D, bparms)
+  luN <- GN%*%(uis)
+  lyN <- beta0 + beta1*lxN + luN + leN*sqrt(sig2le)
+  YN <- exp(lyN)
+  YbarNis <- t(GN)%*%YN/Nis
+  qij <-   ( beta0 + beta1*lxN + luN) + qt(0.75, df=5)
+  s <- sample(1:CNis[1], size=nis[1], replace=FALSE)
+  i <- 1
+  repeat{
+    i <- i + 1
+    s <- c(s, sample((CNis[(i-1)] +1):CNis[i], size=nis[i], replace=FALSE))
+    if(i == D){break}
+  }
+  list(lyN, YN, YbarNis, s, qij, uis)
+}
+
+
+genpopmixedll.comb.ebdist <- function(D, CNis, sig2le, sig2lu, mull0, beta1, Nis, lxN, GN, dfpick, type, bdist, tau, alphasn = -5){
    N <- CNis[D]
   if(type == "T"){
     leN <- (rt(N, df = dfpick) )/sqrt(dfpick/(dfpick - 2))
@@ -11,15 +126,15 @@ genpopmixedll.comb.ebdist <- function(D, CNis, sig2le, sig2lu, mull0, beta1, Nis
     leN <- (rchisq(N, df = dfpick)-dfpick)/sqrt(2*dfpick)*(1+0.1*lxN)
   }
 if(type == "SN"){
-      alpha <- -5
+      alpha <- alphasn
     delta <- alpha/sqrt(1+alpha^2)
      w <- sqrt(1/(1-2*delta^2/pi))
       xi <- -w*delta*sqrt(2/pi)
 	leN <- rsn(N,  xi, w, alpha)
  }
 if(type == "Mix"){
-      indicatbigvar <- rbinom(1, N, 0.2)
-	leN <- rnorm(N, 0, 1)*(1-indicatbigvar) + rnorm(N, 0, 2)*indicatbigvar
+#      indicatbigvar <- rbinom(1, N, 0.2)
+	leN <- rnorm(N, 0, 1)*0.9 + rnorm(N, 0, 2)*0.1
 }
    if(bdist == "Laplace"){
      Ul <- runif(D, -0.5, 0.5)

@@ -43,4 +43,21 @@ areapred <- par.predJWFix(tauvec, dat.temp, sig2bhatupdate,  b.dist, betahat, rh
 #######  LIGPD approximation for the population
 all.q.Jpop=areapred$all.q.J
 
+sig2blls <- c(sig2blls, sig2bhatupdate)
+
+bhatCs <- rbind(bhatCs, areapred$mubJ )
+
+
+#alpha <- -5
+#delta <- alpha/sqrt(1+alpha^2)
+#w <- sqrt(1/(1-2*delta^2/pi))
+#xi <- -w*delta*sqrt(2/pi)
+
+
+#beta0tvs <- qsn(tauvec, xi, w, alpha)*sig2le + beta0
+#beta1tvs <- rep(beta1, length(tauvec))
+#XBhattv <- cbind(1, lxN)%*%rbind(beta0tvs, beta1tvs)
+#areapredTP <- par.predJWFix(tauvec, dat.temp, sig2lu,  b.dist, betahat, rholxilrhouxiu , areafac.pop, smc, XBhattv , Gs, lxN,use.cl= FALSE, Rb = 1500 )
+
+
  

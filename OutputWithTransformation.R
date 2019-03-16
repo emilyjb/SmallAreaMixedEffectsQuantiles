@@ -1,15 +1,16 @@
 rm(list = ls(all = TRUE))
 
 ####  Load output file. For example:
-load("FinalTestTrans.Rdata")
+load("SNELaplaceBTestSeqPoints2-23-2019Part1.Rdata")
 
 ##########  Output for initial table of MC properties of predictors:
 
 ########## Set number of iterations to use
-maxcnt <- cnt
+maxcnt <- sum(cnt)
+ 
 
-
-outmse1 <- cbind(tapply(apply( mhb25Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,
+ outmse1 <- cbind(
+tapply(apply( mhb25Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,
 tapply(apply( mhb25s[1:maxcnt,], 2, sd), nis[1:D[1]], mean)/sqrt(nrow(mhb25s[1:maxcnt,])*20)*100,
 
 tapply(apply( uci25Exps[1:maxcnt,] >= qhats.pop25[1:maxcnt,]  & lci25Exps[1:maxcnt,] <= qhats.pop25[1:maxcnt,] , 2, mean), nis[1:D[1]], mean),
@@ -27,7 +28,8 @@ tapply(apply((qhats.pop25[1:maxcnt,]  -  qhats.samp25[1:maxcnt,]) , 2, mean), ni
 
 
 
-outmse2 <- cbind(tapply(apply( mhb50Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,
+outmse2 <- cbind(
+tapply(apply( mhb50Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,
 tapply(apply( mhb50s[1:maxcnt,], 2, sd), nis[1:D[1]], mean)/sqrt(nrow(mhb25s[1:maxcnt,])*20)*100,
 tapply(apply( uci50Exps[1:maxcnt,] >= qhats.pop5[1:maxcnt,]  & lci50Exps[1:maxcnt,] <= qhats.pop5[1:maxcnt,] , 2, mean), nis[1:D[1]], mean),
 tapply(apply((qhats.pop5[1:maxcnt,]  - exp(w50JCs[1:maxcnt,]))^2, 2, mean), nis[1:D[1]], mean)*100,
@@ -43,7 +45,8 @@ tapply(apply((qhats.pop5[1:maxcnt,]  - qhats.samp5[1:maxcnt,]) , 2, mean), nis[1
 
 
  
-outmse3 <- cbind(tapply(apply( mhb75Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,
+outmse3 <- cbind(
+tapply(apply( mhb75Exps[1:maxcnt,], 2, mean), nis[1:D[1]], mean)*100,
 tapply(apply( mhb75s[1:maxcnt,], 2, sd), nis[1:D[1]], mean)/sqrt(nrow(mhb25s[1:maxcnt,])*20)*100,
 tapply(apply( uci75Exps[1:maxcnt,] >= qhats.pop75[1:maxcnt,]  &   lci75Exps[1:maxcnt,] <=qhats.pop75[1:maxcnt,] , 2, mean), nis[1:D[1]], mean),
 tapply(apply((qhats.pop75[1:maxcnt,]  - exp(w75JCs[1:maxcnt,]))^2, 2, mean), nis[1:D[1]], mean)*100,
@@ -66,7 +69,7 @@ tapply(apply((qhats.pop75[1:maxcnt,]  -  qhats.samp75[1:maxcnt,]) , 2, mean), ni
 rbind(outmse1, outmse2, outmse3)
 
 library("xtable")
-xtable(rbind(outmse1, outmse2, outmse3)[,-2], digits = 3)
+xtable(rbind(outmse1, outmse2, outmse3)[,-2] , digits = 3)
 
 
 apply(rbind(outmse1, outmse2, outmse3)[,c(4,1)], 1, diff)/rbind(outmse1, outmse2, outmse3)[,c(4)]*100
@@ -77,5 +80,30 @@ CovOutput <-  matrix(rbind(outmse1, outmse2, outmse3)[,3], nrow = 3, byrow = TRU
 cbind(RBOutput, CovOutput)
 
 (rbind(outmse1, outmse2, outmse3)[,8]/100)^2/(rbind(outmse1, outmse2, outmse3)[,4]/100)
+ 
+
+tapply(apply((qhats.pop75[1:maxcnt,]  - exp(w75JCs[1:maxcnt,]))^2 - (qhats.pop75[1:maxcnt,]  -  EB.norm.75s[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)/tapply(apply((qhats.pop75[1:maxcnt,]  - exp(w75JCs[1:maxcnt,]))^2 - (qhats.pop75[1:maxcnt,]  -  EB.norm.75s[1:maxcnt,])^2, 2, sd), nis[1:D[1]], mean)
+
+
+tapply(apply((qhats.pop75[1:maxcnt,]  -  EB.norm.75s[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean)
+
+
+
+apply((qhats.pop75[1:maxcnt,]  - exp(w75JCs[1:maxcnt,]))^2 , 2, mean)
+apply((qhats.pop75[1:maxcnt,]  - EB.norm.75s[1:maxcnt,])^2 , 2, mean)
+
+
+hist(qhats.pop75[1:maxcnt,10]  -  exp(w75JCs[1:maxcnt,10]))
+which(qhats.pop75[1:maxcnt,10]  -  exp(w75JCs[1:maxcnt,10]) > 2)
+hist(qhats.pop75[1:maxcnt,6]  -  EB.norm.75s[1:maxcnt,6])
+
+
+
+
+
+
+
+
+
 
 

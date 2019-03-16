@@ -49,9 +49,11 @@ mulx <- 0
 sig2lx <- 1
 
 ####  Set distribution options:
-e.dist <- "Chi" ##( Other options are "T" for t distribution or "Chi" for chi-square)
-b.dist <- "Normal"  ##( Other option is "Laplace")
-doBoot <- TRUE   ##(Change to "FALSE" to skip running bootstrap.)
+edistfun <- SNgenfun ##( Other option used in manuscript is "chigenfunH" used for chi-sqaure)
+e.parms <- -5 # For chi-square used in manuscript, change e-distribution parameters to (2, 0.1) 
+bdistfun <- laplacegenfun ##(Options in manuscript are "laplacegenfun" for "Laplace" and "normalbgenfun" for "Normal")
+b.dist <- "Laplace" ##(Change to "Normal" for normal bi.)
+doBoot <- TRUE  ##(Change to "FALSE" to skip running bootstrap.)
 
 time.start.all <- Sys.time()
 
@@ -70,7 +72,7 @@ cnt <- 0;
   lXN <- cbind(rep(1,N), lxN)
   
   ## Generate data from model and select sample
-  popllmc <- genpopmixedll.comb.ebdist(D, CNis, sig2le, sig2lu,beta0, beta1, Nis, lxN, GN,  2, e.dist, b.dist, 0.75)
+  popllmc <- genpopmixedll.comb.ebdistfuns(D, CNis,edistfun ,e.parms ,bdistfun, sig2lu, lxN, GN, beta0, beta1)
   smc <- popllmc[[4]]; lyNmc <- popllmc[[1]]; yNmc <- popllmc[[2]]; ybarNis <- popllmc[[3]]
   q.pop <- as.vector(popllmc[[5]])	
   lys <- lyNmc[smc]
@@ -79,5 +81,5 @@ cnt <- 0;
   u.pops <- rbind(u.pops, u.pop)
   dat.temp <- data.frame(Y = lys, X = lXs[,2], area = areafac.pop[smc])
 
-  save.image("TestDataSetNoTrans20Oct2018.Rdata")
+  save.image("TestDataSetNoTrans14March2019.Rdata")
 

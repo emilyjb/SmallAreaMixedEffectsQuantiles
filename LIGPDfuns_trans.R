@@ -97,7 +97,14 @@ comp.term <- function(index, pred.mat, get.tau.u, lys, tauvec, rhohat.l, xi.l, r
 
 
 predJWTransFixB0Exp <- function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XBhat.update1, Gs, lxN, use.cl= TRUE, Rb = 150 , trunc = FALSE, lam, B = 0){
-  seq.points <- qnorm(tauvec, mean = 0, sd = sqrt(sig2bhat))
+  if(bdist == "Normal"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qnorm(tauvecseq, mean = 0, sd = sqrt(sig2bhat))
+  }
+  if(bdist == "Laplace"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat))
+  }
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
   if(use.cl){
@@ -267,7 +274,16 @@ estconstrained <- function(dat.temp, fml, tauvec){
 
 
 par.updatebetasig2bfunConstrFix=function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XB.init, Gs, lxN, use.cl= TRUE, Rb = 150 ){
-  seq.points <- qnorm(tauvec, mean = 0, sd = sqrt(sig2bhat))
+   if(bdist == "Normal"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qnorm(tauvecseq, mean = 0, sd = sqrt(sig2bhat))
+  }
+  if(bdist == "Laplace"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat))
+  }
+
+
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
     if(bdist == "Laplace"){
