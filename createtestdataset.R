@@ -1,7 +1,7 @@
 rm(list=ls(all=TRUE))
 
 ### Set your working directory to the folder that contains the files posted to Github. For example:
-setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
+setwd("G:/Researchers-Investigators/Berg/BaseCodeQRSAE/SmallAreaMixedEffectsQuantilesRevSeqPoints")
 
 
 ###  Load libraries
@@ -12,7 +12,8 @@ library("survey")
 library("quantreg")
 library("sn")
 library("eva")
- 
+library("rmutil")
+
 ### Source the following R files
 source("storoutputsimpleEMsim.R") 		# Store output
 source("genpopmixedllcomb.R")			# Generate data
@@ -49,11 +50,18 @@ mulx <- 0
 sig2lx <- 1
 
 ####  Set distribution options:
-edistfun <- SNgenfun ##( Other option used in manuscript is "chigenfunH" used for chi-sqaure)
-e.parms <- -5 # For chi-square used in manuscript, change e-distribution parameters to (2, 0.1) 
+edistfun <- chigenfunH ##( Other option used in manuscript is "chigenfunH" used for chi-sqaure)
+#e.parms <- c(0.5, -50, 30)
+e.parms <- c(2, 0.1) # For chi-square used in manuscript, change e-distribution parameters to (2, 0.1) 
+b.dist <- "Laplace"
+if(b.dist == "Laplace"){
 bdistfun <- laplacegenfun ##(Options in manuscript are "laplacegenfun" for "Laplace" and "normalbgenfun" for "Normal")
-b.dist <- "Laplace" ##(Change to "Normal" for normal bi.)
-doBoot <- TRUE  ##(Change to "FALSE" to skip running bootstrap.)
+aldtype <- "robust"
+}else{
+bdistfun <- normalbgenfun
+aldtype <- "normal"
+}
+doBoot <- FALSE  ##(Change to "FALSE" to skip running bootstrap.)
 
 time.start.all <- Sys.time()
 
@@ -62,10 +70,8 @@ library("parallel")
 cl <- makeCluster(getOption ("cl.cores", 2))  	#Can increase the number of clusters
 
 cnt <- 0; 
-
  
-  
-  cnt <- cnt + 1
+   cnt <- cnt + 1
   
   # Generate  x_ij
   lxN <- mulx + rnorm(N)*sqrt(sig2lx)
@@ -81,5 +87,5 @@ cnt <- 0;
   u.pops <- rbind(u.pops, u.pop)
   dat.temp <- data.frame(Y = lys, X = lXs[,2], area = areafac.pop[smc])
 
-  save.image("TestDataSetNoTrans14March2019.Rdata")
+  save.image("TestDataSetNoTrans24March2019.Rdata")
 

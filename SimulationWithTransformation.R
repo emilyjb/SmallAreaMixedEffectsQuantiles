@@ -1,8 +1,7 @@
 rm(list=ls(all=TRUE))
 
 ##### Set the working directory to a folder that contains the files posted to the Github repository
-setwd("G:/Researchers-Investigators/Berg/BaseCodeQRSAE/SmallAreaMixedEffectsQuantilesRevSeqPoints")
-
+setwd("C:/Users/Emily/Documents/GitHub/SmallAreaMixedEffectsQuantiles")
 
 ### Load libraries
 library(nlme)
@@ -90,7 +89,7 @@ repeat{
   qVecAld  <- seq(0.01, 0.99, by = 0.01)
 
   ###########  Estimate parameters of ALD procedure
-  lq.fit <- lqmm(Y~X, data = dat.temp, random = ~1, tau = qVecAld, group = area)
+  lq.fit <- lqmm(Y~X, data = dat.temp, random = ~1, tau = qVecAld, group = area, nK = 30)
   ###########  ALD predictors of random effects
   ahat.mat <- matrix(unlist( ranef.lqmm(lq.fit)), nrow = length(unique(areafac.pop)), byrow = FALSE)
   ###########  ALD estimators of coefficients
@@ -297,7 +296,7 @@ if(doBoot){
   
   ### Save the Image Every 10 Iterations
   
-  if(cnt%%10 == 0){ save.image("SNENormalBTransFixEBBoot3-12-2019RevSeqPoints1.Rdata") }	
+  if(cnt%%10 == 0){ save.image("SNENormalBTransFixEBBoot3-21-2019RevSeqPoints1.Rdata") }	
   
   print(paste(cnt))
   
