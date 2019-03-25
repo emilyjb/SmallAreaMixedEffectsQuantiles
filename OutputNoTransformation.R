@@ -5,7 +5,7 @@ rm(list = ls(all = TRUE))
 
 ###################    load("SNELaplaceBTestSeqPoints2-23-2019Part1.Rdata")
 
-load("RevisionNovember2018/RevisedEBSims/OutputRevInterpNoTrans/SNENormalBTestSeqPoints2-23-2019Part1.Rdata")
+load("SNELaplaceBTestSeqPoints3-19-2019Part1ALDNk30.Rdata")
 
 #### Set maximum number of iterations to use (typically, maxcnt <- cnt)
 maxcnt <-sum( cnt)
@@ -50,7 +50,7 @@ MCMSETabAll <- rbind(MCMSETab10, MCMSETab25, MCMSETab50, MCMSETab75, MCMSETab90)
 MCBiasTab10 <- rbind(tapply(apply((w10JCs[1:maxcnt,] - qhats.pop10[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean),
 	tapply(apply((q10bs[1:maxcnt,] - qhats.pop10[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean),
 	tapply(apply((EB.norm.10s[1:maxcnt,] - qhats.pop10[1:maxcnt,]), 2, mean),nis[1:D[1]], mean),
-	tapply(apply((qhats.samp10[1:maxcnt,] - qhats.pop10[1:maxcnt,])^2, 2, mean), nis[1:D[1]], mean))
+	tapply(apply((qhats.samp10[1:maxcnt,] - qhats.pop10[1:maxcnt,]) , 2, mean), nis[1:D[1]], mean))
 rownames(MCBiasTab10) <- c("LIGPD","ALD","NEB","Direct")
 
 MCBiasTab25 <- rbind(tapply(apply((w25JCs[1:maxcnt,] - qhats.pop25[1:maxcnt,]) , 2, mean),nis[1:D[1]], mean),
@@ -82,6 +82,16 @@ MCBiasTabAll <- rbind(MCBiasTab10, MCBiasTab25, MCBiasTab50, MCBiasTab75, MCBias
 library("xtable")
 xtable(cbind(MCMSETabAll, MCBiasTabAll)[,c(1,4,2,5,3,6)], digits = 4)
 cbind(MCMSETabAll, MCBiasTabAll)[,c(1,4,2,5,3,6)]
+
+round(cbind(MCMSETabAll, MCBiasTabAll)[,c(1,4,2,5,3,6)], digits = 3)
+
+MCBiasLIGPD <- MCBiasTabAll[which(rownames(MCBiasTabAll) %in% "LIGPD"),]
+MCMSELIGPD <- MCMSETabAll[which(rownames(MCMSETabAll) %in% "LIGPD"),]
+MCBiasLIGPD^2/MCMSELIGPD
+MCMSEALD <- MCMSETabAll[which(rownames(MCMSETabAll) %in% "ALD"),]
+MCMSENEB <- MCMSETabAll[which(rownames(MCMSETabAll) %in% "NEB"),]
+MCMSEALD/MCMSELIGPD
+MCMSENEB/MCMSELIGPD
 
 ##########  Output, including bootstrap bootstrap:
 

@@ -50,11 +50,18 @@ mulx <- 0
 sig2lx <- 1
 
 ####  Set distribution options:
-edistfun <- SNgenfun ##( Other option used in manuscript is "chigenfunH" used for chi-sqaure)
-e.parms <- -5 # For chi-square used in manuscript, change e-distribution parameters to (2, 0.1) 
+edistfun <- chigenfunH ##( Other option used in manuscript is "chigenfunH" used for chi-sqaure)
+#e.parms <- c(0.5, -50, 30)
+e.parms <- c(2, 0.1) # For chi-square used in manuscript, change e-distribution parameters to (2, 0.1) 
+b.dist <- "Laplace"
+if(b.dist == "Laplace"){
 bdistfun <- laplacegenfun ##(Options in manuscript are "laplacegenfun" for "Laplace" and "normalbgenfun" for "Normal")
-b.dist <- "Laplace" ##(Change to "Normal" for normal bi.)
-doBoot <- TRUE  ##(Change to "FALSE" to skip running bootstrap.)
+aldtype <- "robust"
+}else{
+bdistfun <- normalbgenfun
+aldtype <- "normal"
+}
+doBoot <- FALSE  ##(Change to "FALSE" to skip running bootstrap.)
 
 time.start.all <- Sys.time()
 
@@ -88,7 +95,7 @@ repeat{
   qVecAld  <- seq(0.01, 0.99, by = 0.01)
 
   ###########  Estimate parameters of ALD procedure
-  lq.fit <- lqmm(Y~X, data = dat.temp, random = ~1, tau = qVecAld, group = area)
+  lq.fit <- lqmm(Y~X, data = dat.temp, random = ~1, tau = qVecAld, group = area, nK = 30, type = aldtype)
   ###########  ALD predictors of random effects
   ahat.mat <- matrix(unlist( ranef.lqmm(lq.fit)), nrow = length(unique(areafac.pop)), byrow = FALSE)
   ###########  ALD estimators of coefficients
@@ -261,7 +268,7 @@ if(doBoot){
   }
   
   ### Save the Image Every 10 Iterations
-  if(cnt%%10 == 0){ save.image("SNELaplaceBTestSeqPoints3-4-2019Part1.Rdata")  }	
+  if(cnt%%10 == 0){ save.image("ChiELaplaceBTestSeqPoints3-19-2019Part1ALDNk30.Rdata")  }	
   
   print(paste(cnt))
   
