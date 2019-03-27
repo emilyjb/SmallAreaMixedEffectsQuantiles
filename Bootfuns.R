@@ -151,7 +151,14 @@ par.bootestsimple1Rev =function(dat.tempb, X, areafac.samp, D, Gs, tauvec,  Rb, 
 
 
 par.updatebetasig2bfun=function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XB.init, Gs, lxN, use.cl= TRUE, Rb = 150 ){
-  seq.points <- qnorm((1:999)/1000, mean = 0, sd = sqrt(sig2bhat))
+    if(bdist == "Normal"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qnorm(tauvecseq, mean = 0, sd = sqrt(sig2bhat))
+  }
+  if(bdist == "Laplace"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat/2))
+  }
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
     if(bdist == "Laplace"){
@@ -219,7 +226,14 @@ gen.bcond <- function(D, cdf.out, seq.points){
 
 
 par.predJW=function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdpar, areafac.pop, smc, XBhat.update1, Gs, lxN, use.cl= TRUE, Rb = 150 , trunc = FALSE){
-  seq.points <- qnorm((1:999)/1000, mean = 0, sd = sqrt(sig2bhat))
+    if(bdist == "Normal"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qnorm(tauvecseq, mean = 0, sd = sqrt(sig2bhat))
+  }
+  if(bdist == "Laplace"){
+        tauvecseq <- (1:999)/1000
+          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat/2))
+  }
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
     if(bdist == "Laplace"){

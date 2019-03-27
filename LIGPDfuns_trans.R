@@ -103,7 +103,7 @@ predJWTransFixB0Exp <- function(tauvec, dat.temp, sig2bhat, bdist, betahat, gpdp
   }
   if(bdist == "Laplace"){
         tauvecseq <- (1:999)/1000
-          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat))
+          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat/2))
   }
   lys <- dat.temp$Y
   rhohat.l <- gpdpar[1]; xi.l <- gpdpar[2]; rhohat.u <- gpdpar[3]; xi.u <- gpdpar[4]
@@ -280,7 +280,7 @@ par.updatebetasig2bfunConstrFix=function(tauvec, dat.temp, sig2bhat, bdist, beta
   }
   if(bdist == "Laplace"){
         tauvecseq <- (1:999)/1000
-          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat))
+          seq.points <- qlaplace(tauvecseq, m = 0, s = sqrt(sig2bhat/2))
   }
 
 
