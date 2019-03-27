@@ -4,6 +4,7 @@ rm(list = ls(all = TRUE))
 
 load("TestDataSetNoTrans24March2019.Rdata" )
 
+
 ###  Load libraries
 library(nlme)
 library("lqmm")
@@ -12,6 +13,7 @@ library("survey")
 library("quantreg")
 library("sn")
 library("eva")
+library("rmutil")
 
 options("contrasts" = c("contr.sum", "contr.poly"))  ### Use sum to zero constraints for initial values, as defined in Appendix 1
 library("parallel")
@@ -20,11 +22,10 @@ cl <- makeCluster(getOption ("cl.cores", 2))  	#Can increase the number of clust
 
 #####  Compute ALD, NEB, and LIGPD predictors for test data set:
 
-  ##### ###### ####### ######### ########  ALD Procedure  ########  ######## ######## ######## ######## ######## 
-  qVecAld  <- seq(0.01, 0.99, by = 0.01)
+ qVecAld  <- seq(0.01, 0.99, by = 0.01)
 
   ###########  Estimate parameters of ALD procedure
-  lq.fit <- lqmm(Y~X, data = dat.temp, random = ~1, tau = qVecAld, group = area)
+  lq.fit <- lqmm(Y~X, data = dat.temp, random = ~1, tau = qVecAld, group = area, nK = 30, type = aldtype)
   ###########  ALD predictors of random effects
   ahat.mat <- matrix(unlist( ranef.lqmm(lq.fit)), nrow = length(unique(areafac.pop)), byrow = FALSE)
   ###########  ALD estimators of coefficients
@@ -61,7 +62,7 @@ cl <- makeCluster(getOption ("cl.cores", 2))  	#Can increase the number of clust
   qhats.samp25 <- rbind(qhats.samp25,  tapply(lys, areafac.pop[smc], quantile, prob = 0.25))
   qhats.samp5 <- rbind(qhats.samp5,  tapply(lys, areafac.pop[smc], quantile, prob = 0.5))
   qhats.samp75 <- rbind(qhats.samp75,  tapply(lys, areafac.pop[smc], quantile, prob = 0.75))
-  qhats.samp90 <- rbind(qhats.samp75,  tapply(lys, areafac.pop[smc], quantile, prob = 0.90))
+  qhats.samp90 <- rbind(qhats.samp90,  tapply(lys, areafac.pop[smc], quantile, prob = 0.90))
 
   ########### Calculate and store sample means  
   Gs <- GN[smc,] 
@@ -98,11 +99,19 @@ cl <- makeCluster(getOption ("cl.cores", 2))  	#Can increase the number of clust
   gammais <- sig2uhatmc/(sig2uhatmc + sig2ehatmc/nis)
   mu.dev <- as.vector(gammais*(lbarsi - dbarsi%*%betahatmc))
   mean.cond <- lXN%*%betahatmc + GN%*%(mu.dev) 
-  var.cond <- GN%*%(gammais*sig2ehatmc) + sig2ehatmc
+  var.cond <- GN%*%(gammais*sig2ehatmc/nis) + sig2ehatmc
+
+  mudevs <- rbind(mudevs, mu.dev)
+
 
   t.min <- min(all.q)
   t.max <- max(all.q)	
   t.seq <- seq(t.min, t.max, length = 100)
+
+  ##########  Estimate CDF for conditional normal distribution (not used) 
+  cdf.norm.all <- sapply(t.seq, cnp, mean.cond, sqrt(var.cond))
+  cdf.smc <- sapply(t.seq, function(t){ ifelse(lys <= t, 1, 0)})
+  cdf.norm.all[smc,] <- cdf.smc
 
   ########## Implement EBP, as described in Remark 2 of Molina and Rao (2010): 
   ########## Simulate a population from the conditional normal distribution (step b of Remark 2)
@@ -152,6 +161,8 @@ cl <- makeCluster(getOption ("cl.cores", 2))  	#Can increase the number of clust
   varJs <- rbind(varJs, areapred[[7]])
   mubJs <- rbind(mubJs, areapred[[8]])
   vebJs <- rbind(vebJs, areapred[[9]])
+
+
 
   #####  Summarize distributions of estimates of quantiles for comparison with Github documentation:
 
