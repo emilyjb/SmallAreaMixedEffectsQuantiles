@@ -2,8 +2,9 @@ rm(list = ls(all = TRUE))
 
 #####  Load test data set:
 
-load("TestDataSetNoTrans24March2019.Rdata" )
+load("TestDataSetNoTrans28March2019.Rdata" )
 
+set.seed("1234567")
 
 ###  Load libraries
 library(nlme)

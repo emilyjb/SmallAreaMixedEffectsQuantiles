@@ -3,6 +3,7 @@ rm(list=ls(all=TRUE))
 ### Set your working directory to the folder that contains the files posted to Github. For example:
 setwd("G:/Researchers-Investigators/Berg/BaseCodeQRSAE/SmallAreaMixedEffectsQuantilesRevSeqPoints")
 
+set.seed("1234567")
 
 ###  Load libraries
 library(nlme)
@@ -87,5 +88,5 @@ cnt <- 0;
   u.pops <- rbind(u.pops, u.pop)
   dat.temp <- data.frame(Y = lys, X = lXs[,2], area = areafac.pop[smc])
 
-  save.image("TestDataSetNoTrans24March2019.Rdata")
+  save.image("TestDataSetNoTrans28March2019.Rdata")
 
